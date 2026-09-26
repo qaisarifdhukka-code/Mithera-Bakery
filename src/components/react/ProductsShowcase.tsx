@@ -61,8 +61,7 @@ const Model = ({ path, isActive, index, activeIndex, isMobile }: ModelProps) => 
     const targetScale = isActive ? baseScale : inactiveScale;
     ref.current.scale.lerp({ x: targetScale, y: targetScale, z: targetScale }, 0.15);
     
-    // Vertical Slide Logic
-    const activeY = isMobile ? 0.8 : 0.4; // Shift model upwards on mobile
+    const activeY = isMobile ? 0.3 : 0.4; // Shift model on mobile
     let targetY = activeY;
     if (index < activeIndex) {
       targetY = 8; // Slide up out of the screen (shorter distance)
@@ -74,7 +73,7 @@ const Model = ({ path, isActive, index, activeIndex, isMobile }: ModelProps) => 
     ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, targetY, 0.05);
   });
 
-  const activeY = isMobile ? 0.8 : 0.4;
+  const activeY = isMobile ? 0.3 : 0.4;
 
   return (
     <Float floatIntensity={isActive ? 1 : 0} rotationIntensity={isActive ? 0.2 : 0} speed={1.5}>
@@ -236,7 +235,7 @@ export default function ProductsShowcase() {
               ))}
             </Suspense>
             
-            <ContactShadows position={[0, isMobile ? 0.0 : -1.1, 0]} opacity={0.3} scale={10} blur={2.5} far={4} color="#3A241A" frames={1} resolution={256} />
+            <ContactShadows position={[0, isMobile ? -0.5 : -1.1, 0]} opacity={0.3} scale={10} blur={2.5} far={4} color="#3A241A" frames={1} resolution={256} />
           </Canvas>
         </div>
         
