@@ -127,23 +127,21 @@ export default function ProductsShowcase() {
   }, []);
 
   useGSAP(() => {
+    if (window.innerWidth < 1024) return; // Disable GSAP scroll-jacking on mobile completely
+
     const totalItems = products.length;
-    const headerHeight = window.innerWidth < 1024 ? 84 : 112; // Mobile (24+60), Desktop (32+80)
+    const headerHeight = 112; 
     
     stRef.current = ScrollTrigger.create({
       trigger: outerRef.current,
-      start: `top ${headerHeight}px`, // Adapt pin start based on mobile or desktop header height
-      end: `+=${totalItems * (window.innerWidth < 1024 ? 35 : 60)}%`, // 35% on mobile for faster transitions, 60% on desktop
+      start: `top ${headerHeight}px`,
+      end: `+=${totalItems * 60}%`,
       pin: containerRef.current,
-      scrub: 1, // Add smoothing
+      scrub: 1,
       onUpdate: (self) => {
-        // Calculate which index is currently active
         const rawIndex = self.progress * totalItems;
         let index = Math.floor(rawIndex);
-        
-        // Handle edge case where progress is exactly 1
         if (index >= totalItems) index = totalItems - 1;
-        
         setActiveIndex((prev) => (prev !== index ? index : prev));
       }
     });
@@ -151,16 +149,54 @@ export default function ProductsShowcase() {
   }, { scope: outerRef });
 
   const goToIndex = (index: number) => {
-    if (!stRef.current) return;
     const totalItems = products.length;
     if (index < 0 || index >= totalItems) return;
     
-    // Calculate scroll target (middle of the chosen item's scroll range)
+    if (window.innerWidth < 1024) {
+      setActiveIndex(index);
+      return;
+    }
+
+    if (!stRef.current) return;
     const start = stRef.current.start;
     const end = stRef.current.end;
     const targetScroll = start + ((index + 0.1) / totalItems) * (end - start);
     
     window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+  };
+  
+  // Custom Touch Slider Logic for Mobile Scroll Wheel
+  const touchStartY = useRef(0);
+  const handleWheelTouchStart = (e: React.TouchEvent) => {
+    // We intentionally DO NOT stopPropagation here so we don't break react events, 
+    // but we can prevent default in raw DOM if needed. React passive events might complain if we preventDefault.
+    touchStartY.current = e.touches[0].clientY;
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+  };
+  
+  const handleWheelTouchMove = (e: React.TouchEvent) => {
+    // Prevent the native page scroll!
+    if (e.cancelable) e.preventDefault();
+    
+    const currentY = e.touches[0].clientY;
+    const diff = touchStartY.current - currentY;
+    
+    // Swipe UP (drag up) -> Next Product
+    if (diff > 40) {
+      if (activeIndex < products.length - 1) {
+        setActiveIndex(prev => prev + 1);
+        touchStartY.current = currentY; // Reset to require another drag
+        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(10);
+      }
+    } 
+    // Swipe DOWN (drag down) -> Prev Product
+    else if (diff < -40) {
+      if (activeIndex > 0) {
+        setActiveIndex(prev => prev - 1);
+        touchStartY.current = currentY;
+        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(10);
+      }
+    }
   };
 
   return (
@@ -210,17 +246,15 @@ export default function ProductsShowcase() {
           {/* Mobile Safe Scroll Wheel */}
           {isMobile && (
             <div 
-              className="group absolute right-2 top-1/2 -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-pan-y transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
-              onTouchStart={(e) => {
-                e.stopPropagation();
-                if (typeof navigator !== 'undefined' && navigator.vibrate) {
-                  navigator.vibrate(15);
-                }
+              className="group absolute right-2 top-1/2 -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
+              onTouchStart={handleWheelTouchStart}
+              onTouchMove={handleWheelTouchMove}
+              onWheel={(e) => {
+                e.stopPropagation(); 
+                e.preventDefault(); 
+                if (e.deltaY > 0 && activeIndex < products.length - 1) goToIndex(activeIndex + 1);
+                if (e.deltaY < 0 && activeIndex > 0) goToIndex(activeIndex - 1);
               }}
-              onTouchMove={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-              onPointerMove={(e) => e.stopPropagation()}
-              onWheel={(e) => e.stopPropagation()}
             >
               {/* Up Arrow */}
               <svg className="w-4 h-4 text-brand-dark/40 group-active:text-white/70 transition-colors duration-300 mb-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
