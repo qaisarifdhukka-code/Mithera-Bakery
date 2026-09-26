@@ -209,10 +209,17 @@ export default function ProductsShowcase() {
           
           {/* Mobile Safe Scroll Wheel */}
           {isMobile && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 h-[240px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)]">
+            <div 
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-[240px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-pan-y"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onPointerMove={(e) => e.stopPropagation()}
+              onWheel={(e) => e.stopPropagation()}
+            >
               {/* Ridges to look like a scroll wheel */}
               {[...Array(15)].map((_, i) => (
-                <div key={i} className="w-4 h-[2px] bg-brand-dark/20 rounded-full" />
+                <div key={i} className="w-4 h-[2px] bg-brand-dark/20 rounded-full pointer-events-none" />
               ))}
             </div>
           )}
