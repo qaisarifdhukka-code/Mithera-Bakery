@@ -133,7 +133,7 @@ export default function ProductsShowcase() {
     stRef.current = ScrollTrigger.create({
       trigger: outerRef.current,
       start: `top ${headerHeight}px`, // Adapt pin start based on mobile or desktop header height
-      end: `+=${totalItems * 60}%`, // 60% screen height per item for a natural, relaxed scroll pace
+      end: `+=${totalItems * (window.innerWidth < 1024 ? 35 : 60)}%`, // 35% on mobile for faster transitions, 60% on desktop
       pin: containerRef.current,
       scrub: 1, // Add smoothing
       onUpdate: (self) => {
@@ -210,17 +210,31 @@ export default function ProductsShowcase() {
           {/* Mobile Safe Scroll Wheel */}
           {isMobile && (
             <div 
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-[240px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-pan-y"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-pan-y transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-white/50"
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
               onPointerMove={(e) => e.stopPropagation()}
               onWheel={(e) => e.stopPropagation()}
             >
-              {/* Ridges to look like a scroll wheel */}
-              {[...Array(15)].map((_, i) => (
-                <div key={i} className="w-4 h-[2px] bg-brand-dark/20 rounded-full pointer-events-none" />
+              {/* Up Arrow */}
+              <svg className="w-4 h-4 text-brand-dark/40 mb-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
+              
+              {/* Top Ridges */}
+              {[...Array(4)].map((_, i) => (
+                <div key={`top-${i}`} className="w-4 h-[2px] bg-brand-dark/20 rounded-full pointer-events-none" />
               ))}
+              
+              {/* Text */}
+              <span className="text-[8px] font-bold tracking-[0.2em] text-brand-dark/50 my-1 pointer-events-none" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>SCROLL</span>
+              
+              {/* Bottom Ridges */}
+              {[...Array(4)].map((_, i) => (
+                <div key={`bot-${i}`} className="w-4 h-[2px] bg-brand-dark/20 rounded-full pointer-events-none" />
+              ))}
+
+              {/* Down Arrow */}
+              <svg className="w-4 h-4 text-brand-dark/40 mt-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg> 
             </div>
           )}
 
