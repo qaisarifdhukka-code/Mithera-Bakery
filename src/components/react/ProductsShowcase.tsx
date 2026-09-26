@@ -169,7 +169,7 @@ export default function ProductsShowcase() {
         This is the pinned container. 
         It stays on screen while the outer container scrolls.
       */}
-      <div ref={containerRef} className="w-full h-screen lg:h-[calc(100vh-80px)] overflow-hidden text-brand-dark relative bg-transparent" style={{ fontFamily: "var(--font-body)" }}>
+      <div ref={containerRef} className="w-full h-[calc(100dvh-84px)] lg:h-[calc(100dvh-112px)] overflow-hidden text-brand-dark relative bg-transparent" style={{ fontFamily: "var(--font-body)" }}>
         
         <LoadingOverlay />
         
