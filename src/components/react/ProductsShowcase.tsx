@@ -99,7 +99,7 @@ function LoadingOverlay() {
     <div 
       className={`absolute inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--color-cream)] transition-opacity duration-1000 ${active ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
     >
-      <h2 className="text-brand-dark text-3xl mb-6 font-medium" style={{ fontFamily: "var(--font-heading)" }}>Loading Heritage Collection...</h2>
+      <h2 className="text-brand-dark text-xl md:text-3xl mb-6 font-medium text-center px-4" style={{ fontFamily: "var(--font-heading)" }}>Loading Heritage Collection...</h2>
       <div className="w-64 h-[2px] bg-brand-dark/20 overflow-hidden mb-3">
         <div 
           className="h-full bg-brand-dark transition-all duration-300 ease-out" 
@@ -144,7 +144,7 @@ export default function ProductsShowcase() {
         // Handle edge case where progress is exactly 1
         if (index >= totalItems) index = totalItems - 1;
         
-        setActiveIndex(index);
+        setActiveIndex((prev) => (prev !== index ? index : prev));
       }
     });
 
@@ -177,8 +177,9 @@ export default function ProductsShowcase() {
         <div className="absolute inset-0 z-10">
           <Canvas 
             camera={{ position: [0, 0, 6], fov: 45 }}
-            dpr={[1, 2]} 
-            gl={{ powerPreference: "high-performance", antialias: true }}
+            dpr={isMobile ? [1, 1.25] : [1, 2]} 
+            gl={{ powerPreference: "high-performance", antialias: false }}
+            performance={{ min: 0.5 }}
           >
             <ambientLight intensity={2} />
             <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2.5} castShadow />
@@ -187,6 +188,7 @@ export default function ProductsShowcase() {
             <OrbitControls 
               enableZoom={false} 
               enablePan={false} 
+              enableRotate={true}
               autoRotate={true}
               autoRotateSpeed={1.5}
               target={[0, 0.4, 0]} 
@@ -205,6 +207,16 @@ export default function ProductsShowcase() {
         {/* HTML UI Overlay (Interactive & Readable) */}
         <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between px-6 py-2 lg:px-16 lg:pt-2 lg:pb-12 font-sans">
           
+          {/* Mobile Safe Scroll Wheel */}
+          {isMobile && (
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 h-[240px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)]">
+              {/* Ridges to look like a scroll wheel */}
+              {[...Array(15)].map((_, i) => (
+                <div key={i} className="w-4 h-[2px] bg-brand-dark/20 rounded-full" />
+              ))}
+            </div>
+          )}
+
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center w-full h-full relative">
             
             {/* Left Sidebar: Categories Navigation & Titles */}

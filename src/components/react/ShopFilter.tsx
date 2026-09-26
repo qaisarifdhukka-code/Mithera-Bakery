@@ -12,6 +12,7 @@ export default function ShopFilter() {
     return 'All';
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Filter logic
   const filteredProducts = allProducts.filter(product => {
@@ -51,8 +52,43 @@ export default function ShopFilter() {
           </div>
         </div>
 
-        {/* Categories Pills */}
-        <div className="flex overflow-x-auto hide-scrollbar gap-2 lg:gap-3 mb-10 pb-2 -mx-4 px-4 lg:mx-0 lg:px-0">
+        {/* Categories Mobile Custom Dropdown */}
+        <div className="mb-8 md:hidden relative w-full mt-4 sm:mt-0 z-50">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="w-full flex items-center justify-between bg-white border border-brand-dark/10 rounded-full px-5 py-3.5 font-body text-[14px] text-brand-dark font-medium shadow-sm focus:outline-none focus:border-brand-warm focus:ring-1 focus:ring-brand-warm"
+          >
+            <span>{activeCategory}</span>
+            <svg className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          
+          {isDropdownOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[16px] border border-brand-dark/10 shadow-lg z-50 overflow-hidden py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => {
+                      setActiveCategory(category);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-5 py-3 font-body text-[14px] font-medium transition-colors ${
+                      activeCategory === category 
+                        ? 'bg-brand-warm/10 text-brand-dark' 
+                        : 'text-text-secondary hover:bg-cream hover:text-brand-dark'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Categories Pills (Desktop) */}
+        <div className="hidden md:flex flex-wrap gap-2 lg:gap-3 mb-10 pb-2">
           {categories.map((category) => (
             <button
               key={category}
