@@ -343,7 +343,7 @@ export default function ProductsShowcase() {
                 return (
                   <div 
                     key={`tags-${p.id}`} 
-                    className={`absolute bottom-28 lg:bottom-0 left-6 lg:left-auto lg:right-0 flex flex-col items-start lg:items-end gap-3 lg:gap-6 transition-all duration-700 w-full lg:w-auto ${isActive ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-8 pointer-events-none'}`}
+                    className={`absolute bottom-4 lg:bottom-0 left-6 lg:left-auto lg:right-0 flex flex-col items-start lg:items-end gap-3 lg:gap-6 transition-all duration-700 w-full lg:w-auto ${isActive ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-8 pointer-events-none'}`}
                   >
                     <div className="flex flex-wrap justify-start lg:justify-end gap-2 lg:gap-3 max-w-[280px]">
                       {/* Fake sub-tags */}
