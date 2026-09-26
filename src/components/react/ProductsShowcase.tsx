@@ -57,16 +57,16 @@ const Model = ({ path, isActive, index, activeIndex, isMobile }: ModelProps) => 
     
     // Scale animation: smaller on mobile so it fits the screen
     const baseScale = isMobile ? 0.65 : 1.5;
-    const inactiveScale = isMobile ? 0.45 : 1.0;
+    const inactiveScale = 0;
     const targetScale = isActive ? baseScale : inactiveScale;
     ref.current.scale.lerp({ x: targetScale, y: targetScale, z: targetScale }, 0.15);
     
     const activeY = isMobile ? 0.3 : 0.4; // Shift model on mobile
     let targetY = activeY;
     if (index < activeIndex) {
-      targetY = 8; // Slide up out of the screen (shorter distance)
+      targetY = 20; // Slide up completely out of the screen
     } else if (index > activeIndex) {
-      targetY = -8; // Slide down out of the screen (shorter distance)
+      targetY = -20; // Slide down completely out of the screen
     }
     
     // Smoothly interpolate the Y position (slower for a natural, elegant feel)
