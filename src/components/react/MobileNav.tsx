@@ -52,8 +52,9 @@ export default function MobileNav() {
         <nav className="flex flex-col">
           <a href="/" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Home</a>
           <a href="/shop" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Shop</a>
+          <a href="/products" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Products</a>
           <a href="/story" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Our Story</a>
-          <a href="/gifting" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Corporate Gifting</a>
+          <a href="/gifting" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Gifting</a>
           <a href="/contact" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Contact</a>
           
           <a href="/shop" onClick={closeMenu} className="mt-8 flex items-center justify-center gap-2 py-3 px-7 text-[0.9rem] font-medium rounded-full bg-brand-dark text-white border-2 border-brand-dark transition-all hover:bg-brand-hover hover:-translate-y-0.5 hover:shadow-lg w-full">

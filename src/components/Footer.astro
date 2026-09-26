@@ -5,10 +5,10 @@ import SubscribeForm from './react/SubscribeForm';
 
 <footer id="footer" class="bg-cream text-brand-dark pt-5">
   <div class="container">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr_2fr] gap-6 pb-[30px] border-b border-brand-dark/15">
+    <div class="grid grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr_2fr] gap-6 pb-[30px] border-b border-brand-dark/15">
       
       {/* Brand Column */}
-      <div class="sm:col-span-2 lg:col-span-1">
+      <div class="col-span-2 lg:col-span-1">
         <a href="/" class="flex items-center gap-2 mb-3" aria-label="Mithera Home">
           <img src="/images/LOGO.png" alt="Mithera Logo" class="w-[120px] h-auto block" />
         </a>
@@ -38,7 +38,7 @@ import SubscribeForm from './react/SubscribeForm';
           <li class="mb-2.5"><a href="/" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Home</a></li>
           <li class="mb-2.5"><a href="/shop" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Shop</a></li>
           <li class="mb-2.5"><a href="/products" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Products</a></li>
-          <li class="mb-2.5"><a href="/our-story" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Our Story</a></li>
+          <li class="mb-2.5"><a href="/story" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Our Story</a></li>
           <li class="mb-2.5"><a href="/gifting" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Gifting</a></li>
           <li class="mb-2.5"><a href="/contact" class="text-[11px] text-text-secondary no-underline transition-colors hover:text-brand-dark">Contact</a></li>
         </ul>
@@ -79,7 +79,7 @@ import SubscribeForm from './react/SubscribeForm';
       </div>
 
       {/* Subscribe */}
-      <div class="sm:col-span-2 lg:col-span-1">
+      <div class="col-span-2 lg:col-span-1">
         <h4 class="font-body text-[11px] font-semibold text-brand-dark mb-4">Subscribe</h4>
         <p class="text-[11px] text-text-secondary mb-4 max-w-[200px]">
           Get updates on new products, offers and more.
@@ -89,18 +89,20 @@ import SubscribeForm from './react/SubscribeForm';
     </div>
 
     {/* Footer Bottom */}
-    <div class="py-4 flex flex-col md:flex-row justify-between items-center text-[10px] text-text-secondary gap-4 text-center md:text-left">
-      <p class="md:flex-1 md:text-left m-0">© 2024 Mithera. All Rights Reserved.</p>
+    <div class="py-4 flex flex-row flex-nowrap justify-between items-center text-[7px] min-[375px]:text-[8px] sm:text-[10px] text-text-secondary gap-1 sm:gap-4 text-center md:text-left overflow-x-auto whitespace-nowrap hide-scrollbar">
       
-      <a href="https://digitelixx.com/" target="_blank" rel="noopener noreferrer" class="md:flex-1 flex justify-center items-center gap-1.5 no-underline transition-opacity hover:opacity-80">
-        <span class="text-[10px] text-text-secondary">Powered by digitelixx</span>
-        <img src="/images/Best Digital Marketing Company in Mumbai.png" alt="Digitelixx" class="h-4 w-auto object-contain opacity-90" />
-      </a>
+      <p class="text-left m-0">© 2024 Mithera.</p>
 
-      <div class="md:flex-1 flex justify-center md:justify-end gap-4">
+      <div class="flex justify-center gap-2 sm:gap-4 mx-2">
         <a href="#" class="text-text-secondary no-underline hover:text-brand-dark transition-colors">Privacy Policy</a>
         <a href="#" class="text-text-secondary no-underline hover:text-brand-dark transition-colors">Terms & Conditions</a>
       </div>
+      
+      <a href="https://digitelixx.com/" target="_blank" rel="noopener noreferrer" class="flex justify-end items-center gap-1 no-underline transition-opacity hover:opacity-80">
+        <span class="text-text-secondary">Powered by digitelixx</span>
+        <img src="/images/Best Digital Marketing Company in Mumbai.png" alt="Digitelixx" class="h-2.5 sm:h-4 w-auto object-contain opacity-90" />
+      </a>
+
     </div>
   </div>
 </footer>
