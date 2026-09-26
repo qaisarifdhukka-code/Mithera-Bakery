@@ -1,0 +1,62 @@
+---
+import { ArrowRight } from 'lucide-react';
+---
+
+<style>
+  @media (min-width: 1024px) {
+    .promo-mask {
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 40%);
+      mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 40%);
+    }
+  }
+</style>
+
+<section id="promo" class="py-[30px] lg:py-[35px] bg-cream">
+  <div class="container px-3 lg:px-[40px]">
+    <div class="grid grid-cols-2 gap-2 lg:gap-[16px]">
+      
+      <!-- Gift Hampers Banner -->
+      <div class="group relative flex items-center rounded-[8px] h-[130px] lg:h-[270px] overflow-hidden bg-[#F9EBE6] shadow-[0_2px_8px_rgba(58,36,26,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(58,36,26,0.06)] reveal">
+        <div class="absolute inset-0 lg:left-auto lg:right-0 lg:w-[65%] z-0 promo-mask">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#F9EBE6] via-[#F9EBE6]/80 to-transparent lg:hidden z-10"></div>
+          <img 
+            src="/images/hero-image.png" 
+            alt="Curated Gift Hampers" 
+            class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+            loading="lazy"
+          />
+        </div>
+        <div class="relative z-20 p-2 lg:p-0 lg:pl-[28px] w-full lg:w-[55%] flex flex-col justify-center h-full">
+          <p class="font-body text-[6px] lg:text-[10px] font-semibold tracking-[0.5px] lg:tracking-[1.5px] text-brand-warm uppercase mb-0.5 lg:mb-1.5">FOR YOUR SPECIAL MOMENTS</p>
+          <h3 class="font-heading text-[12px] sm:text-[14px] lg:text-[28px] font-medium text-brand-dark leading-[1.1] lg:leading-[1.05] mb-1.5 lg:mb-2.5">Beautifully<br/>Curated<br/>Gift Hampers</h3>
+          <p class="font-body text-[11px] font-normal text-text-secondary leading-[1.4] max-w-[250px] mb-4 hidden lg:block">A perfect blend of traditional sweets and baked delights for every occasion.</p>
+          <a href="/shop" class="inline-flex items-center justify-center w-[70px] lg:w-[118px] h-[22px] lg:h-[36px] bg-brand-dark text-cream text-[7px] lg:text-[11px] font-medium rounded-[3px] lg:rounded-[4px] transition-colors hover:bg-brand-hover mt-auto lg:mt-0">
+            Explore <ArrowRight className="ml-1 w-2 h-2 lg:w-3 lg:h-3" strokeWidth={2} />
+          </a>
+        </div>
+      </div>
+
+      <!-- Bakery Banner -->
+      <div class="group relative flex items-center rounded-[8px] h-[130px] lg:h-[270px] overflow-hidden bg-[#F3ECE2] shadow-[0_2px_8px_rgba(58,36,26,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(58,36,26,0.06)] reveal reveal-delay-2">
+        <div class="absolute inset-0 lg:left-auto lg:right-0 lg:w-[65%] z-0 promo-mask">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#F3ECE2] via-[#F3ECE2]/80 to-transparent lg:hidden z-10"></div>
+          <img 
+            src="/images/hero-image.png" 
+            alt="Fresh from our oven" 
+            class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+            loading="lazy"
+          />
+        </div>
+        <div class="relative z-20 p-2 lg:p-0 lg:pl-[28px] w-full lg:w-[55%] flex flex-col justify-center h-full">
+          <p class="font-body text-[6px] lg:text-[10px] font-semibold tracking-[0.5px] lg:tracking-[1.5px] text-brand-warm uppercase mb-0.5 lg:mb-1.5">FRESHLY BAKED<br/>EVERYDAY</p>
+          <h3 class="font-heading text-[12px] sm:text-[14px] lg:text-[28px] font-medium text-brand-dark leading-[1.1] lg:leading-[1.05] mb-1.5 lg:mb-2.5">From Our<br/>Oven to You</h3>
+          <p class="font-body text-[11px] font-normal text-text-secondary leading-[1.4] max-w-[250px] mb-4 hidden lg:block">Croissants, breads, puffs and more — baked fresh with premium ingredients.</p>
+          <a href="/shop" class="inline-flex items-center justify-center w-[70px] lg:w-[118px] h-[22px] lg:h-[36px] bg-transparent text-brand-dark border border-brand-dark/20 text-[7px] lg:text-[11px] font-medium rounded-[3px] lg:rounded-[4px] transition-all hover:bg-brand-dark hover:text-cream-off hover:border-brand-dark mt-auto lg:mt-0">
+            Browse <ArrowRight className="ml-1 w-2 h-2 lg:w-3 lg:h-3" strokeWidth={2} />
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

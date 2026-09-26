@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/react/HeroSection';
+import CategoriesSection from '../components/CategoriesSection.astro';
+import BestsellersSection from '../components/BestsellersSection.astro';
+import PromoBannersSection from '../components/PromoBannersSection.astro';
+import TestimonialsSection from '../components/react/TestimonialsSection';
+import CtaSection from '../components/CtaSection.astro';
+---
+
+<BaseLayout title="Mithera Bakery & Patisserie | Traditional Flavours, Modern Craftsmanship">
+<main>
+    <HeroSection client:load />
+    <CategoriesSection />
+    <BestsellersSection />
+    <PromoBannersSection />
+    <TestimonialsSection client:load />
+    <CtaSection />
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Intersection Observer for scroll animations
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Optional: stop observing once revealed
+          // observer.unobserve(entry.target); 
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.15
+    });
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
+  });
+</script>
+

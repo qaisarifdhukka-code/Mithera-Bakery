@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import ProductsShowcase from '../components/react/ProductsShowcase';
+import CtaSection from '../components/CtaSection.astro';
+---
+
+<BaseLayout title="Our Products | Mithera Bakery & Patisserie">
+<main class="w-full bg-[var(--color-cream)] overflow-x-hidden pt-0">
+    {/* The Interactive Scroll Showcase */}
+    <div class="relative w-full">
+      <ProductsShowcase client:only="react">
+        <div slot="fallback" class="w-full h-screen lg:h-[calc(100vh-80px)] relative z-[100] flex flex-col items-center justify-center bg-[var(--color-cream)]">
+          <h2 class="text-brand-dark text-3xl mb-6 font-medium" style="font-family: var(--font-heading)">Loading Heritage Collection...</h2>
+          <div class="w-64 h-[2px] bg-brand-dark/20 overflow-hidden mb-3">
+            <div class="h-full bg-brand-dark w-full animate-pulse"></div>
+          </div>
+          <p class="text-brand-dark/70 text-xs font-semibold tracking-[0.2em]">INITIALIZING</p>
+        </div>
+      </ProductsShowcase>
+    </div>
+
+    <CtaSection />
+  </main>
+
+  <Footer />
+</BaseLayout>
+

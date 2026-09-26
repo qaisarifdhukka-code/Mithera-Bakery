@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import { MapPin, Phone, Mail } from 'lucide-react';
+---
+
+<BaseLayout title="Contact Us | Mithera Bakery & Patisserie">
+<main class="min-h-[calc(100vh-80px)] flex items-center py-12">
+    <div class="container max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-10 lg:gap-y-0 items-center">
+        
+        {/* Header (Top on both) */}
+        <div class="md:col-start-1 md:row-start-1 reveal text-left self-end md:pb-6">
+          <h1 class="font-heading text-[40px] lg:text-[48px] text-brand-dark mb-4">
+            Let's Talk
+          </h1>
+          <p class="font-body text-[14px] text-text-secondary max-w-[300px]">
+            We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          </p>
+        </div>
+
+        {/* Minimal Form (Middle on mobile, Right on desktop) */}
+        <div class="md:col-start-2 md:row-start-1 md:row-span-2 reveal reveal-delay-2">
+          <form class="font-body text-[13px] space-y-6">
+            <div class="flex flex-col md:flex-row gap-6">
+              <div class="w-full md:w-1/2">
+                <input 
+                  type="text" 
+                  placeholder="First Name" 
+                  class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors" 
+                />
+              </div>
+              <div class="w-full md:w-1/2">
+                <input 
+                  type="text" 
+                  placeholder="Last Name" 
+                  class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors" 
+                />
+              </div>
+            </div>
+            
+            <div>
+              <input 
+                type="email" 
+                placeholder="Email Address" 
+                class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors" 
+              />
+            </div>
+
+            <div>
+              <textarea 
+                rows="2" 
+                placeholder="Your Message" 
+                class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors resize-none"
+              ></textarea>
+            </div>
+
+            <div class="pt-2">
+              <button 
+                type="button" 
+                class="bg-brand-dark text-cream-off px-8 py-2.5 rounded-[4px] font-medium hover:bg-brand-hover transition-all hover:shadow-md w-full md:w-auto"
+              >
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Contact Info (Bottom on mobile, Bottom-Left on desktop) */}
+        <div class="md:col-start-1 md:row-start-2 reveal flex justify-start self-start md:pt-6">
+          <div class="space-y-5 font-body text-[14px] text-brand-dark flex flex-col items-start w-max">
+            <div class="flex items-center gap-4">
+              <Mail className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
+              <a href="mailto:hello@mithera.com" class="hover:text-brand-accent transition-colors">hello@mithera.com</a>
+            </div>
+            <div class="flex items-center gap-4">
+              <Phone className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
+              <a href="tel:+919876543210" class="hover:text-brand-accent transition-colors">+91 98765 43210</a>
+            </div>
+            <div class="flex items-center gap-4">
+              <MapPin className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
+              <span>123 Artisan Bakery Lane, Mumbai</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.15
+    });
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
+  });
+</script>
+

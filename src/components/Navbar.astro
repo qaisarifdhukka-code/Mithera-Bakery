@@ -1,0 +1,113 @@
+---
+import { Search, Heart } from 'lucide-react';
+import MobileNav from './react/MobileNav';
+import CartIndicator from './react/CartIndicator';
+import ToastContainer from './react/ToastContainer';
+import SearchOverlay from './react/SearchOverlay';
+
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'Shop', href: '/shop' },
+  { name: 'Products', href: '/products' },
+  { name: 'Our Story', href: '/story' },
+  { name: 'Gifting', href: '/gifting' },
+  { name: 'Contact', href: '/contact' },
+];
+---
+
+<nav id="navbar" class="bg-cream-off h-[60px] lg:h-[80px] sticky top-6 md:top-8 z-[1000] border-b border-brand-dark/10 shadow-[0_2px_8px_rgba(58,36,26,0.02)] transition-shadow duration-300">
+  <div class="container h-full flex items-center justify-between relative">
+    
+    {/* Mobile Menu Toggle (Left) */}
+    <div class="flex lg:hidden z-20">
+      <MobileNav client:load />
+    </div>
+    
+    {/* Logo */}
+    <a href="/" class="flex items-center absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 z-10" aria-label="Mithera Home">
+      <img src="/images/LOGO.png" alt="Mithera Logo" class="w-[80px] lg:w-[140px] h-auto" />
+    </a>
+
+    {/* Desktop Links */}
+    <div class="hidden lg:flex items-center gap-[26px] mx-auto">
+      {navLinks.map(link => {
+        const isActive = currentPath === link.href || currentPath === link.href + '/';
+        return (
+          <a 
+            href={link.href} 
+            class={`font-body text-[14px] font-medium text-brand-dark relative py-1 transition-opacity duration-200 hover:opacity-70 group ${isActive ? 'active-link' : ''}`}
+          >
+            {link.name}
+            <span class={`absolute -bottom-2 left-0 w-full h-[2px] bg-brand-dark transition-transform duration-200 origin-center ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
+          </a>
+        );
+      })}
+    </div>
+
+    {/* Actions */}
+    <div class="flex items-center gap-2 lg:gap-[18px] relative z-20">
+      
+      <SearchOverlay client:load />
+      
+      <a href="/wishlist" class="bg-transparent border-none p-1 cursor-pointer flex items-center justify-center text-brand-dark transition-opacity hover:opacity-70" aria-label="Wishlist">
+        <Heart className="w-[18px] h-[18px] lg:w-[21px] lg:h-[21px]" strokeWidth={1.5} />
+      </a>
+      
+      <CartIndicator client:load />
+
+      <a href="/products" class="hidden lg:inline-flex items-center justify-center bg-brand-dark text-cream-off w-[118px] h-[44px] rounded-[22px] text-[12px] font-semibold no-underline transition-colors hover:bg-brand-hover">
+        Order Now &rarr;
+      </a>
+    </div>
+  </div>
+  
+  <ToastContainer client:only="react" />
+</nav>
+
+<script>
+  // Active nav link on scroll + Sticky shadow
+  document.addEventListener('DOMContentLoaded', () => {
+    const navbar = document.getElementById('navbar');
+    const links = document.querySelectorAll('.nav-links a, #navbar a.group');
+    const sections = document.querySelectorAll('section[id], footer[id]');
+
+    window.addEventListener('scroll', () => {
+      // Sticky shadow
+      if (window.scrollY > 10) {
+        navbar?.classList.add('shadow-md');
+      } else {
+        navbar?.classList.remove('shadow-md');
+      }
+
+      // Active link
+      const scrollPos = window.scrollY + (navbar?.offsetHeight || 0) + 100;
+      
+      sections.forEach(section => {
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionHeight = (section as HTMLElement).offsetHeight;
+        const sectionId = section.getAttribute('id');
+
+        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+          links.forEach(link => {
+            link.classList.remove('active-link');
+            const span = link.querySelector('span');
+            if (span) {
+              span.classList.remove('scale-x-100');
+              span.classList.add('scale-x-0');
+            }
+
+            if (link.getAttribute('href') === `#${sectionId}`) {
+              link.classList.add('active-link');
+              if (span) {
+                span.classList.remove('scale-x-0');
+                span.classList.add('scale-x-100');
+              }
+            }
+          });
+        }
+      });
+    }, { passive: true });
+  });
+</script>

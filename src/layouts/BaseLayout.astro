@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/500.css';
+import '@fontsource/playfair-display/600.css';
+import '@fontsource/playfair-display/700.css';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+
+import AnnouncementBar from '../components/AnnouncementBar.astro';
+import Navbar from '../components/Navbar.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = "Mithera – Premium Indian sweets, freshly baked goods, cookies, gift hampers & more. Traditional flavours with modern craftsmanship, delivered to your door." 
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Indian sweets, bakery, mithai, gift hampers, cookies, croissants, Mithera, Mumbai bakery" />
+    <meta name="author" content="Mithera" />
+    <meta name="theme-color" content="#3D2418" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
+    <link rel="icon" type="image/png" href="/images/LOGO.png" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <AnnouncementBar />
+    <Navbar />
+    <slot />
+    
+    <script>
+      // Scroll Reveal Animation (runs on client)
+      document.addEventListener('DOMContentLoaded', () => {
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.15,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(el => {
+          revealObserver.observe(el);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (this: HTMLAnchorElement, e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || !href) return;
+            
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              const navbar = document.getElementById('navbar');
+              const navHeight = navbar ? navbar.offsetHeight : 0;
+              const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+              
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

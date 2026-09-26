@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import ShopFilter from '../components/react/ShopFilter';
+---
+
+<BaseLayout title="Shop | Mithera Bakery & Patisserie">
+<main class="min-h-screen bg-cream">
+    <ShopFilter client:load />
+  </main>
+  
+  <Footer />
+</BaseLayout>
+

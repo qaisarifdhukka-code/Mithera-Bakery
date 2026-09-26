@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import CartView from '../components/react/CartView';
+---
+
+<BaseLayout title="Your Cart | Mithera Bakery & Patisserie">
+<main class="min-h-[calc(100vh-80px)] bg-cream">
+    <CartView client:only="react" />
+  </main>
+  
+  <Footer />
+</BaseLayout>
+

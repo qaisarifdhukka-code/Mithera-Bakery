@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import WishlistGrid from '../components/react/WishlistGrid';
+---
+
+<BaseLayout title="My Wishlist | Mithera Bakery & Patisserie">
+  <main class="min-h-screen bg-cream py-12 lg:py-20">
+    <div class="container max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h1 class="font-heading text-[36px] lg:text-[48px] font-medium text-brand-dark mb-4">My Wishlist</h1>
+        <p class="font-body text-text-secondary">Your curated collection of favorite treats.</p>
+      </div>
+
+      <WishlistGrid client:only="react" />
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>

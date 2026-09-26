@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Page Not Found | Mithera Bakery & Patisserie">
+  <main class="min-h-[75vh] bg-[var(--color-cream)] flex flex-col items-center justify-center py-20 px-6 text-center">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="font-heading text-[100px] lg:text-[140px] font-medium text-brand-dark leading-none mb-4">404</h1>
+      <h2 class="font-heading text-[28px] lg:text-[40px] font-medium text-brand-dark mb-6">Oops! We couldn't find that page.</h2>
+      
+      <p class="font-body text-text-secondary text-[15px] lg:text-[16px] mb-10 max-w-[400px] mx-auto leading-relaxed">
+        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. Let's get you back to the delicious stuff!
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/" class="inline-flex items-center justify-center w-[160px] h-[46px] bg-brand-dark text-[var(--color-cream)] text-[14px] font-medium rounded-[6px] transition-all hover:bg-brand-hover hover:-translate-y-[2px] hover:shadow-lg">
+          Back to Home
+        </a>
+        <a href="/shop" class="inline-flex items-center justify-center w-[160px] h-[46px] bg-transparent border-[1.5px] border-brand-dark/30 text-brand-dark text-[14px] font-medium rounded-[6px] transition-all hover:border-brand-dark hover:bg-brand-dark/5 hover:-translate-y-[2px]">
+          Visit Shop
+        </a>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>

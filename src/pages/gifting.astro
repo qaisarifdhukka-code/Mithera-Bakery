@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import { Mail, Phone, MapPin } from 'lucide-react';
+import GiftingForm from '../components/react/GiftingForm';
+---
+
+<BaseLayout title="Corporate Gifting | Mithera Bakery & Patisserie">
+<main class="bg-cream min-h-screen pt-16 lg:pt-24 pb-20 lg:pb-32">
+    <div class="container max-w-6xl mx-auto px-4">
+      
+      {/* Title Section (Matches Our Menu / Contact) */}
+      <div class="mb-20">
+        <h1 class="font-heading text-[48px] lg:text-[56px] text-brand-dark mb-4 leading-tight">Corporate Gifting</h1>
+        <p class="font-body text-[15px] lg:text-[16px] text-text-secondary max-w-2xl">
+          Leave a lasting impression with Mithera's artisanal sweets and bespoke packaging, tailored exclusively for your business partners and employees.
+        </p>
+      </div>
+
+      {/* Main Content Layout (Matches Let's Talk layout) */}
+      <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
+        
+        {/* Left Side: Information */}
+        <div class="w-full lg:w-5/12 flex flex-col gap-12">
+          
+          <div>
+            <h2 class="font-heading text-[28px] text-brand-dark mb-4">Tailored to Perfection</h2>
+            <p class="font-body text-[14px] text-text-secondary leading-relaxed mb-6">
+              Whether it's Diwali, employee onboarding, client appreciation, or festive celebrations, our corporate gifting catalog offers something extraordinary for every occasion.
+            </p>
+            
+            <ul class="font-body text-[14px] text-brand-dark space-y-3">
+              <li class="flex items-center gap-3">
+                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
+                Custom packaging with your company logo
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
+                Curated assortments of traditional & modern sweets
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
+                Volume discounts for large-scale orders
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
+                Seamless multi-point Pan-India delivery
+              </li>
+            </ul>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-4 text-brand-dark">
+              <Mail class="w-5 h-5 text-[#DBA540]" strokeWidth={1.5} />
+              <span class="font-body text-[14px]">corporate@mithera.com</span>
+            </div>
+            <div class="flex items-center gap-4 text-brand-dark">
+              <Phone class="w-5 h-5 text-[#DBA540]" strokeWidth={1.5} />
+              <span class="font-body text-[14px]">+91 91523 19661</span>
+            </div>
+            <div class="flex items-center gap-4 text-brand-dark">
+              <MapPin class="w-5 h-5 text-[#DBA540]" strokeWidth={1.5} />
+              <span class="font-body text-[14px]">123 Artisan Bakery Lane, Mumbai</span>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Right Side: Form */}
+        <div class="w-full lg:w-7/12">
+          <GiftingForm client:load />
+        </div>
+
+      </div>
+      
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
