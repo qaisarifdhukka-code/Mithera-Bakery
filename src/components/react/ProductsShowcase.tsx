@@ -182,7 +182,7 @@ export default function ProductsShowcase() {
     const diff = touchStartY.current - currentY;
     
     // Swipe UP (drag up) -> Next Product
-    if (diff > 40) {
+    if (diff > 20) {
       if (activeIndex < products.length - 1) {
         setActiveIndex(prev => prev + 1);
         touchStartY.current = currentY; // Reset to require another drag
@@ -190,7 +190,7 @@ export default function ProductsShowcase() {
       }
     } 
     // Swipe DOWN (drag down) -> Prev Product
-    else if (diff < -40) {
+    else if (diff < -20) {
       if (activeIndex > 0) {
         setActiveIndex(prev => prev - 1);
         touchStartY.current = currentY;
