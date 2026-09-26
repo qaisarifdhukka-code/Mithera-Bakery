@@ -246,7 +246,7 @@ export default function ProductsShowcase() {
           {/* Mobile Safe Scroll Wheel */}
           {isMobile && (
             <div 
-              className="group absolute right-2 top-1/2 -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
+              className="group absolute right-2 top-1/2 -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-none transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
               onTouchStart={handleWheelTouchStart}
               onTouchMove={handleWheelTouchMove}
               onWheel={(e) => {
