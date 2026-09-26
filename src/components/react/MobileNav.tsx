@@ -8,11 +8,14 @@ export default function MobileNav() {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [isOpen]);
 
@@ -43,12 +46,12 @@ export default function MobileNav() {
 
       {/* Overlay */}
       <div 
-        className={`fixed inset-0 bg-black/50 z-[998] lg:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/50 z-[998] lg:hidden touch-none transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={closeMenu}
       />
 
       {/* Drawer */}
-      <div className={`fixed top-0 right-0 w-[300px] h-full bg-cream-off z-[999] lg:hidden p-8 pt-[100px] overflow-y-auto transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 w-[300px] h-full bg-cream-off z-[999] lg:hidden p-8 pt-[100px] overflow-y-auto overscroll-contain transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <nav className="flex flex-col">
           <a href="/" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Home</a>
           <a href="/shop" onClick={closeMenu} className="block py-4 text-[1.1rem] font-medium text-text-secondary hover:text-brand-dark border-b border-brand-warm/20 transition-all hover:pl-2">Shop</a>
