@@ -182,7 +182,7 @@ export default function ProductsShowcase() {
     const diff = touchStartY.current - currentY;
     
     // Swipe UP (drag up) -> Next Product
-    if (diff > 20) {
+    if (diff > 40) {
       if (activeIndex < products.length - 1) {
         setActiveIndex(prev => prev + 1);
         touchStartY.current = currentY; // Reset to require another drag
@@ -190,7 +190,7 @@ export default function ProductsShowcase() {
       }
     } 
     // Swipe DOWN (drag down) -> Prev Product
-    else if (diff < -20) {
+    else if (diff < -40) {
       if (activeIndex > 0) {
         setActiveIndex(prev => prev - 1);
         touchStartY.current = currentY;
@@ -246,7 +246,7 @@ export default function ProductsShowcase() {
           {/* Mobile Safe Scroll Wheel */}
           {isMobile && (
             <div 
-              className="group absolute right-2 top-1/2 -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-none transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
+              className="group absolute right-2 top-[60%] -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-none select-none transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
               onTouchStart={handleWheelTouchStart}
               onTouchMove={handleWheelTouchMove}
               onWheel={(e) => {
@@ -257,7 +257,7 @@ export default function ProductsShowcase() {
               }}
             >
               {/* Up Arrow */}
-              <svg className="w-4 h-4 text-brand-dark/40 group-active:text-white/70 transition-colors duration-300 mb-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
+              <svg className="w-4 h-4 text-brand-dark/40 group-active:text-white/70 transition-colors duration-300 mb-1 pointer-events-none animate-bounce group-active:animate-none group-hover:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
               
               {/* Top Ridges */}
               {[...Array(4)].map((_, i) => (
@@ -265,7 +265,7 @@ export default function ProductsShowcase() {
               ))}
               
               {/* Text */}
-              <span className="text-[8px] font-bold tracking-[0.2em] text-brand-dark/50 group-active:text-white/80 transition-colors duration-300 my-1 pointer-events-none" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>SCROLL</span>
+              <span className="text-[7px] font-bold tracking-[0.15em] text-brand-dark/50 group-active:text-white/80 transition-colors duration-300 my-1 pointer-events-none whitespace-nowrap" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>HOLD & SCROLL</span>
               
               {/* Bottom Ridges */}
               {[...Array(4)].map((_, i) => (
@@ -273,7 +273,7 @@ export default function ProductsShowcase() {
               ))}
 
               {/* Down Arrow */}
-              <svg className="w-4 h-4 text-brand-dark/40 group-active:text-white/70 transition-colors duration-300 mt-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg> 
+              <svg className="w-4 h-4 text-brand-dark/40 group-active:text-white/70 transition-colors duration-300 mt-1 pointer-events-none animate-bounce group-active:animate-none group-hover:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg> 
             </div>
           )}
 
