@@ -125,6 +125,33 @@ export default function ProductsShowcase() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Keyboard Navigation for Desktop
+  React.useEffect(() => {
+    if (isMobile) return; 
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input
+      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
+      
+      // We only want to trigger this if the user has scrolled down to the showcase section
+      // A simple check is if the showcase is visible in viewport, but goToIndex handles smooth scrolling nicely.
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        if (activeIndex < products.length - 1) {
+          e.preventDefault();
+          goToIndex(activeIndex + 1);
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        if (activeIndex > 0) {
+          e.preventDefault();
+          goToIndex(activeIndex - 1);
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeIndex, isMobile]);
+
   useGSAP(() => {
     if (window.innerWidth < 1024) return; // Disable GSAP scroll-jacking on mobile completely
 
@@ -216,7 +243,7 @@ export default function ProductsShowcase() {
         <LoadingOverlay />
         
         {/* 3D Canvas Context */}
-        <div className="absolute inset-0 z-10">
+        <div className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing">
           <Canvas 
             camera={{ position: [0, 0, 6], fov: 45 }}
             dpr={isMobile ? [1, 1.25] : [1, 2]} 
@@ -234,6 +261,10 @@ export default function ProductsShowcase() {
               autoRotate={true}
               autoRotateSpeed={1.5}
               target={[0, 0.4, 0]} 
+              enableDamping={true}
+              dampingFactor={0.05}
+              minPolarAngle={Math.PI / 3}
+              maxPolarAngle={Math.PI / 2 + 0.1}
             />
             
             <Suspense fallback={null}>
