@@ -166,10 +166,13 @@ export default function ProductsShowcase() {
   
   // Custom Touch Slider Logic for Mobile Scroll Wheel
   const touchStartY = useRef(0);
+  const touchStartTime = useRef(0);
+  
   const handleWheelTouchStart = (e: React.TouchEvent) => {
     // We intentionally DO NOT stopPropagation here so we don't break react events, 
     // but we can prevent default in raw DOM if needed. React passive events might complain if we preventDefault.
     touchStartY.current = e.touches[0].clientY;
+    touchStartTime.current = Date.now();
     if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
   };
   
@@ -179,20 +182,24 @@ export default function ProductsShowcase() {
     
     const currentY = e.touches[0].clientY;
     const diff = touchStartY.current - currentY;
+    const timeDiff = Date.now() - (touchStartTime.current || Date.now());
+    const velocity = Math.abs(diff) / (timeDiff || 1);
     
-    // Swipe UP (drag up) -> Next Product
-    if (diff > 40) {
+    // Swipe UP (drag up) -> Next Product (triggers on 40px drag OR fast flick > 15px)
+    if (diff > 40 || (velocity > 0.8 && diff > 15)) {
       if (activeIndex < products.length - 1) {
         setActiveIndex(prev => prev + 1);
         touchStartY.current = currentY; // Reset to require another drag
+        touchStartTime.current = Date.now();
         if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(10);
       }
     } 
     // Swipe DOWN (drag down) -> Prev Product
-    else if (diff < -40) {
+    else if (diff < -40 || (velocity > 0.8 && diff < -15)) {
       if (activeIndex > 0) {
         setActiveIndex(prev => prev - 1);
         touchStartY.current = currentY;
+        touchStartTime.current = Date.now();
         if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(10);
       }
     }
@@ -245,7 +252,7 @@ export default function ProductsShowcase() {
           {/* Mobile Safe Scroll Wheel */}
           {isMobile && (
             <div 
-              className="group absolute right-2 top-[60%] -translate-y-1/2 h-[260px] w-12 bg-white/30 backdrop-blur-md border border-brand-dark/10 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[0_4px_12px_rgba(58,36,26,0.05)] touch-none select-none transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
+              className="group absolute right-2 top-[60%] -translate-y-1/2 h-[260px] w-[50px] bg-gradient-to-b from-white/40 to-white/10 backdrop-blur-md border border-[#E5B55C]/50 rounded-full z-[100] pointer-events-auto flex flex-col items-center justify-center gap-2 shadow-[inset_0_2px_10px_rgba(255,255,255,0.3),0_4px_12px_rgba(58,36,26,0.05)] touch-none select-none transition-all duration-300 opacity-60 hover:opacity-100 active:opacity-100 active:scale-95 active:bg-[#1a120d] active:border-transparent"
               onTouchStart={handleWheelTouchStart}
               onTouchMove={handleWheelTouchMove}
               onWheel={(e) => {
@@ -255,6 +262,13 @@ export default function ProductsShowcase() {
                 if (e.deltaY < 0 && activeIndex > 0) goToIndex(activeIndex - 1);
               }}
             >
+              {/* Live Tracker Line (Left Edge) */}
+              <div className="absolute left-[6px] top-8 bottom-8 w-[2px] bg-brand-dark/10 rounded-full pointer-events-none overflow-hidden group-active:bg-white/10 transition-colors duration-300">
+                <div 
+                  className="absolute top-0 left-0 w-full bg-[#E5B55C] rounded-full transition-transform duration-500 ease-out group-active:bg-white"
+                  style={{ height: '33.33%', transform: `translateY(${activeIndex * 100}%)` }}
+                />
+              </div>
               {/* Up Arrow */}
               <svg className="w-4 h-4 text-brand-dark/40 group-active:text-white/70 transition-colors duration-300 mb-1 pointer-events-none animate-bounce group-active:animate-none group-hover:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
               
