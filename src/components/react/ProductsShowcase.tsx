@@ -57,7 +57,7 @@ const Model = ({ path, isActive, index, activeIndex, isMobile }: ModelProps) => 
     
     // Scale animation: smaller on mobile so it fits the screen
     const baseScale = isMobile ? 0.65 : 1.5;
-    const inactiveScale = 0;
+    const inactiveScale = 0.0001; // Never use exactly 0 to prevent WebGL matrix crashes
     const targetScale = isActive ? baseScale : inactiveScale;
     ref.current.scale.lerp({ x: targetScale, y: targetScale, z: targetScale }, 0.15);
     
