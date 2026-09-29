@@ -12,8 +12,9 @@ export default function TestimonialsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === 'left' ? -300 : 300;
+    if (scrollRef.current && scrollRef.current.firstElementChild) {
+      const cardWidth = (scrollRef.current.firstElementChild as HTMLElement).clientWidth + 16; // 16px gap
+      const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -31,11 +32,11 @@ export default function TestimonialsSection() {
             <h2 className="font-heading text-[18px] sm:text-[22px] lg:text-[34px] font-medium text-brand-dark leading-none mb-0">What Our Customers Say</h2>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => scroll('left')} className="w-[24px] h-[24px] lg:w-[30px] lg:h-[30px] rounded-full bg-cream border border-[#8C6A4A]/20 text-text-secondary flex items-center justify-center cursor-pointer transition-colors hover:bg-brand-warm hover:text-white" aria-label="Previous">
-              <ArrowLeft className="w-3 h-3 lg:w-4 lg:h-4" />
+            <button onClick={() => scroll('left')} className="p-1 text-text-secondary flex items-center justify-center cursor-pointer transition-opacity hover:opacity-70" aria-label="Previous">
+              <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" strokeWidth={1.5} />
             </button>
-            <button onClick={() => scroll('right')} className="w-[24px] h-[24px] lg:w-[30px] lg:h-[30px] rounded-full bg-cream border border-[#8C6A4A]/20 text-text-secondary flex items-center justify-center cursor-pointer transition-colors hover:bg-brand-warm hover:text-white" aria-label="Next">
-              <ArrowRight className="w-3 h-3 lg:w-4 lg:h-4" />
+            <button onClick={() => scroll('right')} className="p-1 text-text-secondary flex items-center justify-center cursor-pointer transition-opacity hover:opacity-70" aria-label="Next">
+              <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6" strokeWidth={1.5} />
             </button>
           </div>
         </div>
@@ -49,17 +50,19 @@ export default function TestimonialsSection() {
           {testimonials.map((t, i) => (
             <div 
               key={i} 
-              className={`reveal reveal-delay-${(i % 5) + 1} snap-start shrink-0 flex flex-col bg-cream-off border border-[#5C3723]/10 rounded-[6px] p-2 lg:p-[14px] min-h-[80px] lg:min-h-[100px] w-[calc(50%-4px)] lg:w-[calc(33.333%-11px)]`}
+              className={`reveal reveal-delay-${(i % 5) + 1} snap-center shrink-0 flex flex-col justify-between bg-cream-off border border-[#5C3723]/10 rounded-[6px] p-5 lg:p-[24px] min-h-[180px] lg:min-h-[220px] w-full lg:w-[calc(33.333%-11px)] h-auto`}
             >
-              <div className="text-[7px] lg:text-[11px] tracking-[1px] lg:tracking-[2px] text-brand-gold mb-1 lg:mb-2">★★★★★</div>
-              <p className="font-body text-[8px] lg:text-[11px] leading-[1.3] lg:leading-[1.4] text-text-secondary mb-2 lg:mb-3 grow" dangerouslySetInnerHTML={{ __html: t.text }}></p>
-              <div className="flex items-center gap-1.5 lg:gap-2">
-                <div className="w-[18px] h-[18px] lg:w-[26px] lg:h-[26px] rounded-full bg-cream flex items-center justify-center font-semibold text-[8px] lg:text-[11px] text-brand-dark shrink-0">
+              <div>
+                <div className="text-[14px] lg:text-[16px] tracking-[2px] text-brand-gold mb-3 lg:mb-4">★★★★★</div>
+                <p className="font-body text-[14px] lg:text-[16px] leading-[1.5] text-text-secondary mb-4 grow" dangerouslySetInnerHTML={{ __html: t.text }}></p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-[36px] h-[36px] lg:w-[42px] lg:h-[42px] rounded-full bg-cream border border-brand-warm/20 flex items-center justify-center font-semibold text-[14px] lg:text-[16px] text-brand-dark shrink-0">
                   {t.avatar}
                 </div>
                 <div className="flex flex-col justify-center">
-                  <p className="font-semibold text-[8px] lg:text-[11px] text-brand-dark m-0 leading-tight">{t.author}</p>
-                  <p className="text-[7px] lg:text-[10px] text-text-secondary m-0 leading-tight">{t.loc}</p>
+                  <p className="font-semibold text-[13px] lg:text-[15px] text-brand-dark m-0 leading-tight">{t.author}</p>
+                  <p className="text-[11px] lg:text-[13px] text-text-secondary m-0 mt-0.5 leading-tight">{t.loc}</p>
                 </div>
               </div>
             </div>
