@@ -96,11 +96,11 @@ export default function GiftingForm() {
             onChange={handleChange} 
             className="w-full h-[40px] border-b border-brand-dark/20 font-body text-[14px] text-brand-dark/80 focus:outline-none focus:border-brand-dark transition-colors bg-transparent appearance-none"
           >
-            <option value="" disabled>Estimated Quantity</option>
-            <option value="Under 50">Under 50 Boxes</option>
-            <option value="50-100">50 - 100 Boxes</option>
-            <option value="100-500">100 - 500 Boxes</option>
-            <option value="500+">500+ Boxes</option>
+            <option value="" disabled>&nbsp;&nbsp;Estimated Quantity</option>
+            <option value="Under 50">&nbsp;&nbsp;Under 50 Boxes</option>
+            <option value="50-100">&nbsp;&nbsp;50 - 100 Boxes</option>
+            <option value="100-500">&nbsp;&nbsp;100 - 500 Boxes</option>
+            <option value="500+">&nbsp;&nbsp;500+ Boxes</option>
           </select>
         </div>
         <div>
