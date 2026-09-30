@@ -54,8 +54,8 @@ export default function PromoSlider() {
               </div>
               <div className="relative z-20 p-5 lg:p-0 lg:pl-[40px] w-full lg:w-[45%] flex flex-col justify-center h-full items-start mt-auto lg:mt-0 pb-5 lg:pb-0">
                 <p className="font-body text-[9px] lg:text-[11px] font-semibold tracking-[1.5px] text-brand-warm uppercase mb-1.5 max-w-[55%] lg:max-w-none">FOR YOUR SPECIAL MOMENTS</p>
-                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[55%] lg:max-w-none">Beautifully<br/>Curated<br/>Gift Hampers</h3>
-                <p className="font-body text-[12px] lg:text-[13px] font-normal text-text-secondary leading-[1.4] max-w-[55%] lg:max-w-[280px] mb-4">A perfect blend of traditional sweets and baked delights for every occasion.</p>
+                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[55%] lg:max-w-none">Beautifully Curated Gift Hampers</h3>
+                <p className="font-body text-[12px] lg:text-[14px] font-normal text-text-secondary leading-[1.4] max-w-[55%] lg:max-w-[420px] mb-4 lg:mb-6">A perfect blend of traditional sweets and baked delights for every occasion.</p>
                 <a href="/shop" className="inline-flex items-center justify-center w-[100px] lg:w-[120px] h-[34px] lg:h-[38px] bg-brand-dark text-white text-[11px] lg:text-[12px] font-medium rounded-[4px] transition-colors hover:bg-brand-hover shadow-sm">
                   Explore <ArrowRight className="ml-1.5 w-3 h-3" strokeWidth={2} />
                 </a>
@@ -77,8 +77,8 @@ export default function PromoSlider() {
               </div>
               <div className="relative z-20 p-5 lg:p-0 lg:pl-[40px] w-full lg:w-[45%] flex flex-col justify-center h-full items-start mt-auto lg:mt-0 pb-5 lg:pb-0">
                 <p className="font-body text-[9px] lg:text-[11px] font-semibold tracking-[1.5px] text-brand-warm uppercase mb-1.5 max-w-[55%] lg:max-w-none">FRESHLY BAKED EVERYDAY</p>
-                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[55%] lg:max-w-none">From Our<br/>Oven to You</h3>
-                <p className="font-body text-[12px] lg:text-[13px] font-normal text-text-secondary leading-[1.4] max-w-[55%] lg:max-w-[280px] mb-4">Croissants, breads, puffs and more — baked fresh with premium ingredients.</p>
+                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[55%] lg:max-w-none">From Our Oven to You</h3>
+                <p className="font-body text-[12px] lg:text-[14px] font-normal text-text-secondary leading-[1.4] max-w-[55%] lg:max-w-[420px] mb-4 lg:mb-6">Croissants, breads, puffs and more — baked fresh with premium ingredients.</p>
                 <a href="/shop" className="inline-flex items-center justify-center w-[100px] lg:w-[120px] h-[34px] lg:h-[38px] bg-transparent text-brand-dark border-[1.5px] border-brand-dark text-[11px] lg:text-[12px] font-medium rounded-[4px] transition-all hover:bg-brand-dark hover:text-white">
                   Browse <ArrowRight className="ml-1.5 w-3 h-3" strokeWidth={2} />
                 </a>

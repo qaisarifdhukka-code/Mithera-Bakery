@@ -71,7 +71,7 @@ export default function HeroSection() {
             </a>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-5 lg:gap-[24px] reveal reveal-delay-4 pt-2 lg:pt-0">
+          <div className="hidden md:flex flex-col sm:flex-row gap-5 lg:gap-[24px] reveal reveal-delay-4 pt-2 lg:pt-0">
             <div className="flex items-center gap-[12px]">
               <Leaf className="w-[22px] h-[22px] text-[#C9A26F] shrink-0" strokeWidth={1.5} />
               <span className="font-body text-[13px] lg:text-[12px] text-[#6D5E54] font-medium tracking-[0.2px] leading-[1.3]">
