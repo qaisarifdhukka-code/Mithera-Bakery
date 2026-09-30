@@ -53,9 +53,9 @@ export default function HeroSection() {
             Traditional Flavours, Modern Craftsmanship
           </p>
           
-          <h1 className="font-heading text-[38px] lg:text-[58px] leading-[1.05] font-medium text-[#3A241A] mb-4 reveal reveal-delay-1">
-            Bringing<br className="hidden lg:block" /> Sweetness to<br />
-            Every Occasion
+          <h1 className="font-heading text-[36px] sm:text-[38px] lg:text-[58px] leading-[1.05] font-medium text-[#3A241A] mb-4 reveal reveal-delay-1">
+            Bringing Sweetness<br />
+            to Every Occasion
           </h1>
           
           <p className="font-body text-[15px] lg:text-[16px] text-[#6D5E54] leading-[1.55] mb-[26px] max-w-[400px] reveal reveal-delay-2">

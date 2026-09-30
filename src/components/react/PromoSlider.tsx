@@ -42,9 +42,9 @@ export default function PromoSlider() {
         >
           {/* Slide 1: Gift Hampers */}
           <div className="w-full shrink-0 snap-start px-1 lg:px-2">
-            <div className="group relative flex flex-col lg:flex-row items-center rounded-[8px] h-[220px] lg:h-[280px] overflow-hidden bg-[#F9EBE6] shadow-[0_2px_8px_rgba(58,36,26,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(58,36,26,0.06)]">
+            <div className="group relative flex flex-col lg:flex-row items-center rounded-[8px] min-h-[250px] lg:h-[280px] overflow-hidden bg-[#F9EBE6] shadow-[0_2px_8px_rgba(58,36,26,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(58,36,26,0.06)]">
               <div className="absolute inset-0 lg:left-auto lg:right-0 lg:w-[55%] z-0 promo-mask">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#F9EBE6] from-[25%] via-[#F9EBE6]/80 via-[40%] to-transparent to-[55%] lg:hidden z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#F9EBE6] from-[45%] via-[#F9EBE6]/80 via-[65%] to-transparent to-[85%] lg:hidden z-10"></div>
                 <img 
                   src="/images/hero-image.png" 
                   alt="Curated Gift Hampers" 
@@ -53,9 +53,9 @@ export default function PromoSlider() {
                 />
               </div>
               <div className="relative z-20 p-5 lg:p-0 lg:pl-[40px] w-full lg:w-[45%] flex flex-col justify-center h-full items-start mt-auto lg:mt-0 pb-5 lg:pb-0">
-                <p className="font-body text-[9px] lg:text-[11px] font-semibold tracking-[1.5px] text-brand-warm uppercase mb-1.5 max-w-[55%] lg:max-w-none">FOR YOUR SPECIAL MOMENTS</p>
-                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[55%] lg:max-w-none">Beautifully Curated Gift Hampers</h3>
-                <p className="font-body text-[12px] lg:text-[14px] font-normal text-text-secondary leading-[1.4] max-w-[55%] lg:max-w-[420px] mb-4 lg:mb-6">A perfect blend of traditional sweets and baked delights for every occasion.</p>
+                <p className="font-body text-[9px] lg:text-[11px] font-semibold tracking-[1.5px] text-brand-warm uppercase mb-1.5 max-w-[65%] lg:max-w-none">FOR YOUR SPECIAL MOMENTS</p>
+                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[65%] lg:max-w-none">Beautifully Curated Gift Hampers</h3>
+                <p className="font-body text-[12px] lg:text-[14px] font-normal text-text-secondary leading-[1.4] max-w-[65%] lg:max-w-[420px] mb-4 lg:mb-6">A perfect blend of traditional sweets and baked delights for every occasion.</p>
                 <a href="/shop" className="inline-flex items-center justify-center w-[100px] lg:w-[120px] h-[34px] lg:h-[38px] bg-brand-dark text-white text-[11px] lg:text-[12px] font-medium rounded-[4px] transition-colors hover:bg-brand-hover shadow-sm">
                   Explore <ArrowRight className="ml-1.5 w-3 h-3" strokeWidth={2} />
                 </a>
@@ -65,9 +65,9 @@ export default function PromoSlider() {
 
           {/* Slide 2: Bakery Banner */}
           <div className="w-full shrink-0 snap-start px-1 lg:px-2">
-            <div className="group relative flex flex-col lg:flex-row items-center rounded-[8px] h-[220px] lg:h-[280px] overflow-hidden bg-[#F3ECE2] shadow-[0_2px_8px_rgba(58,36,26,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(58,36,26,0.06)]">
+            <div className="group relative flex flex-col lg:flex-row items-center rounded-[8px] min-h-[250px] lg:h-[280px] overflow-hidden bg-[#F3ECE2] shadow-[0_2px_8px_rgba(58,36,26,0.03)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(58,36,26,0.06)]">
               <div className="absolute inset-0 lg:left-auto lg:right-0 lg:w-[55%] z-0 promo-mask">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#F3ECE2] from-[25%] via-[#F3ECE2]/80 via-[40%] to-transparent to-[55%] lg:hidden z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#F3ECE2] from-[45%] via-[#F3ECE2]/80 via-[65%] to-transparent to-[85%] lg:hidden z-10"></div>
                 <img 
                   src="/images/hero-image.png" 
                   alt="Fresh from our oven" 
@@ -76,9 +76,9 @@ export default function PromoSlider() {
                 />
               </div>
               <div className="relative z-20 p-5 lg:p-0 lg:pl-[40px] w-full lg:w-[45%] flex flex-col justify-center h-full items-start mt-auto lg:mt-0 pb-5 lg:pb-0">
-                <p className="font-body text-[9px] lg:text-[11px] font-semibold tracking-[1.5px] text-brand-warm uppercase mb-1.5 max-w-[55%] lg:max-w-none">FRESHLY BAKED EVERYDAY</p>
-                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[55%] lg:max-w-none">From Our Oven to You</h3>
-                <p className="font-body text-[12px] lg:text-[14px] font-normal text-text-secondary leading-[1.4] max-w-[55%] lg:max-w-[420px] mb-4 lg:mb-6">Croissants, breads, puffs and more — baked fresh with premium ingredients.</p>
+                <p className="font-body text-[9px] lg:text-[11px] font-semibold tracking-[1.5px] text-brand-warm uppercase mb-1.5 max-w-[65%] lg:max-w-none">FRESHLY BAKED EVERYDAY</p>
+                <h3 className="font-heading text-[22px] lg:text-[34px] font-medium text-brand-dark leading-[1.05] mb-2.5 max-w-[65%] lg:max-w-none">From Our Oven to You</h3>
+                <p className="font-body text-[12px] lg:text-[14px] font-normal text-text-secondary leading-[1.4] max-w-[65%] lg:max-w-[420px] mb-4 lg:mb-6">Croissants, breads, puffs and more — baked fresh with premium ingredients.</p>
                 <a href="/shop" className="inline-flex items-center justify-center w-[100px] lg:w-[120px] h-[34px] lg:h-[38px] bg-transparent text-brand-dark border-[1.5px] border-brand-dark text-[11px] lg:text-[12px] font-medium rounded-[4px] transition-all hover:bg-brand-dark hover:text-white">
                   Browse <ArrowRight className="ml-1.5 w-3 h-3" strokeWidth={2} />
                 </a>
