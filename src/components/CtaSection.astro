@@ -1,5 +1,7 @@
 ---
 import { ArrowRight } from 'lucide-react';
+
+const { data } = Astro.props;
 ---
 
 <style>
@@ -13,28 +15,28 @@ import { ArrowRight } from 'lucide-react';
   }
 </style>
 
-<section id="cta-banner" class="w-full bg-cream px-4 lg:px-[40px] pt-[20px] pb-[40px]">
-  <div class="max-w-[1200px] mx-auto bg-[#EDE2D3] rounded-[8px] overflow-hidden h-[80px] lg:h-[180px] flex items-center justify-center relative text-center reveal">
+<section id="cta-banner" class="w-full bg-cream px-4 lg:px-[40px] pt-[25px] pb-[45px]">
+  <div class="max-w-[1200px] mx-auto bg-cream border border-brand-warm/25 rounded-[12px] overflow-hidden min-h-[100px] sm:h-[140px] lg:h-[220px] flex items-center justify-center relative text-center reveal shadow-[0_4px_20px_rgba(58,36,26,0.05)]">
     
     <img 
-      src="/images/products/Kaju katli.png" 
+      src={data?.leftImage || "/images/products/Kaju katli.png"} 
       alt="Sweets" 
-      class="absolute left-0 top-0 w-[50%] h-full object-cover z-0 cta-mask-left" 
+      class="absolute left-0 top-0 w-[45%] h-full object-cover z-0 cta-mask-left opacity-90" 
       loading="lazy"
     />
     
     <img 
-      src="/images/products/Malai barfi.png" 
+      src={data?.rightImage || "/images/products/Malai barfi.png"} 
       alt="Bakery" 
-      class="absolute right-0 top-0 w-[50%] h-full object-cover z-0 cta-mask-right" 
+      class="absolute right-0 top-0 w-[45%] h-full object-cover z-0 cta-mask-right opacity-90" 
       loading="lazy"
     />
 
-    <div class="relative z-10 flex flex-col items-center px-4 w-full">
-      <h2 class="font-heading text-[12px] sm:text-[20px] lg:text-[32px] font-medium text-brand-dark mb-0.5 lg:mb-2 leading-tight">Make Every Occasion Sweeter</h2>
-      <p class="font-body text-[7px] sm:text-[10px] lg:text-[12px] text-text-secondary leading-[1.3] lg:leading-[1.5] max-w-[180px] sm:max-w-[280px] lg:max-w-[440px] mb-1.5 lg:mb-[18px]">Custom sweet boxes, bakery platters and gift hampers made just for you.</p>
-      <a href="/shop" class="inline-flex items-center justify-center w-[65px] lg:w-[120px] h-[20px] lg:h-[36px] bg-brand-dark text-cream text-[7px] lg:text-[12px] font-medium rounded-[3px] lg:rounded-[4px] transition-colors hover:bg-brand-hover">
-        Order Now <ArrowRight className="ml-[2px] w-2 h-2 lg:w-3 lg:h-3" strokeWidth={2} />
+    <div class="relative z-10 flex flex-col items-center px-4 py-4 w-full">
+      <h2 class="font-heading text-[15px] sm:text-[22px] lg:text-[36px] font-medium text-brand-dark mb-1 lg:mb-2.5 leading-tight">{data?.title || 'Make Every Occasion Sweeter'}</h2>
+      <p class="font-body text-[9px] sm:text-[12px] lg:text-[15px] text-text-secondary leading-[1.3] lg:leading-[1.6] max-w-[260px] sm:max-w-[380px] lg:max-w-[540px] mb-2 lg:mb-5">{data?.subtitle || 'Custom sweet boxes, bakery platters and gift hampers made fresh daily for you.'}</p>
+      <a href={data?.btnLink || "/shop"} class="inline-flex items-center justify-center px-4 lg:px-6 h-[26px] sm:h-[32px] lg:h-[42px] bg-brand-dark text-cream text-[9px] sm:text-[11px] lg:text-[13px] font-medium rounded-[4px] lg:rounded-[6px] transition-all hover:bg-brand-hover shadow-sm hover:shadow">
+        {data?.btnText || 'Order Now'} <ArrowRight className="ml-1.5 w-2.5 h-2.5 lg:w-3.5 lg:h-3.5" strokeWidth={2} />
       </a>
     </div>
 

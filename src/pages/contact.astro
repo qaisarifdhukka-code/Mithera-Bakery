@@ -1,90 +1,212 @@
 ---
+import { sanityClient } from '../lib/sanity';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageSquare, ExternalLink } from 'lucide-react';
+import FaqSection from '../components/react/FaqSection';
+import DescriptiveContent from '../components/DescriptiveContent.astro';
+
+const contactData = await sanityClient.fetch(`*[_type == "contactPage"][0]`);
+
+const safeData = {
+  tagline: contactData?.tagline || "Get In Touch",
+  heading: contactData?.heading || "We'd Love To Hear From You",
+  subtext: contactData?.subtext || "Whether you have a question about our sweets, corporate gifting, or want to place a bespoke celebration order, our team is here to assist.",
+  storeTitle: contactData?.storeTitle || "Visit Our Store",
+  address: contactData?.address || "Shop No. 13 & 14, B Wing, Pooja Enclave, Old Link Road, Opp. Ganesh Nagar, Near Atharva College, Nilkanth Nagar, Kandivali West, Mumbai, Maharashtra 400067",
+  phone: contactData?.phone || "+91 9930309063",
+  email: contactData?.email || "mitherasweets@gmail.com",
+  hours: contactData?.hours || "Monday to Sunday: 9:00 AM – 12:00 AM (Midnight)",
+  hoursBadge: contactData?.hoursBadge || "Open 7 Days a Week",
+  mapUrl: contactData?.mapUrl || "https://maps.google.com/?q=Shop+No+13+Pooja+Enclave+Old+Link+Road+Kandivali+West+Mumbai+400067",
+  formTitle: contactData?.formTitle || "Send Us A Message",
+  formSubtitle: contactData?.formSubtitle || "Fill in your details below and we will get back to you promptly.",
+  faqs: contactData?.faqs || [],
+  descriptiveContent: contactData?.descriptiveContent || "",
+  seoTitle: contactData?.seoTitle || "Contact Us | Mithera Sweets & Bakery Kandivali West",
+  seoDescription: contactData?.seoDescription || "Visit Mithera Sweets & Bakery at Pooja Enclave, Kandivali West, Mumbai or contact us at +91 9930309063 for custom orders, bulk sweets, and inquiries.",
+  schemaJson: contactData?.schemaJson,
+};
+
+const cleanPhoneNum = safeData.phone.replace(/[^0-9]/g, '') || "919930309063";
 ---
 
-<BaseLayout title="Contact Us | Mithera Bakery & Patisserie">
-<main class="min-h-[calc(100vh-80px)] flex items-center py-12">
-    <div class="container max-w-4xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-10 lg:gap-y-0 items-center">
+<BaseLayout 
+  title={safeData.seoTitle}
+  description={safeData.seoDescription}
+  schemaJson={safeData.schemaJson}
+>
+  <main class="min-h-[calc(100vh-80px)] bg-cream py-12 lg:py-20">
+    <div class="container max-w-5xl mx-auto px-4">
+      
+      {/* Header */}
+      <div class="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-warm/15 text-brand-dark text-[12px] font-semibold uppercase tracking-wider mb-3">
+          <MessageSquare className="w-3.5 h-3.5 text-brand-warm" /> {safeData.tagline}
+        </span>
+        <h1 class="font-heading text-[38px] lg:text-[48px] text-brand-dark mb-3">
+          {safeData.heading}
+        </h1>
+        <p class="font-body text-[15px] text-text-secondary leading-relaxed">
+          {safeData.subtext}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
         
-        {/* Header (Top on both) */}
-        <div class="md:col-start-1 md:row-start-1 reveal text-left self-end md:pb-6">
-          <h1 class="font-heading text-[40px] lg:text-[48px] text-brand-dark mb-4">
-            Let's Talk
-          </h1>
-          <p class="font-body text-[14px] text-text-secondary max-w-[300px]">
-            We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-          </p>
-        </div>
-
-        {/* Minimal Form (Middle on mobile, Right on desktop) */}
-        <div class="md:col-start-2 md:row-start-1 md:row-span-2 reveal reveal-delay-2">
-          <form class="font-body text-[13px] space-y-6">
-            <div class="flex flex-col md:flex-row gap-6">
-              <div class="w-full md:w-1/2">
-                <input 
-                  type="text" 
-                  placeholder="First Name" 
-                  class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors" 
-                />
-              </div>
-              <div class="w-full md:w-1/2">
-                <input 
-                  type="text" 
-                  placeholder="Last Name" 
-                  class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors" 
-                />
-              </div>
-            </div>
+        {/* Contact Info (Left Column) */}
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div class="bg-white p-7 rounded-[16px] border border-brand-warm/15 shadow-[0_4px_16px_rgba(58,36,26,0.04)] space-y-6">
+            <h2 class="font-heading text-[22px] text-brand-dark border-b border-brand-dark/10 pb-3">{safeData.storeTitle}</h2>
             
-            <div>
-              <input 
-                type="email" 
-                placeholder="Email Address" 
-                class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors" 
-              />
+            <div class="flex items-start gap-3.5 text-brand-dark">
+              <MapPin className="w-5 h-5 text-brand-warm shrink-0 mt-1" strokeWidth={1.5} />
+              <div>
+                <p class="font-body text-[12px] font-semibold text-brand-warm uppercase tracking-wider mb-0.5">Store Address</p>
+                <p class="font-body text-[14px] text-text-secondary leading-snug">
+                  {safeData.address}
+                </p>
+                <a 
+                  href={safeData.mapUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 font-body text-[12px] font-semibold text-brand-warm hover:underline mt-2"
+                >
+                  Get Directions on Maps <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
             </div>
 
-            <div>
-              <textarea 
-                rows="2" 
-                placeholder="Your Message" 
-                class="w-full bg-transparent border-b border-brand-dark/20 py-2 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm transition-colors resize-none"
-              ></textarea>
+            <div class="flex items-start gap-3.5 text-brand-dark">
+              <Phone className="w-5 h-5 text-brand-warm shrink-0 mt-1" strokeWidth={1.5} />
+              <div>
+                <p class="font-body text-[12px] font-semibold text-brand-warm uppercase tracking-wider mb-0.5">Phone & WhatsApp</p>
+                <a href={`tel:${safeData.phone.replace(/\s+/g, '')}`} class="font-body text-[15px] font-semibold text-brand-dark hover:text-brand-warm transition-colors block">
+                  {safeData.phone}
+                </a>
+              </div>
             </div>
 
-            <div class="pt-2">
-              <button 
-                type="button" 
-                class="bg-brand-dark text-cream-off px-8 py-2.5 rounded-[4px] font-medium hover:bg-brand-hover transition-all hover:shadow-md w-full md:w-auto"
-              >
-                Send Message
-              </button>
+            <div class="flex items-start gap-3.5 text-brand-dark">
+              <Mail className="w-5 h-5 text-brand-warm shrink-0 mt-1" strokeWidth={1.5} />
+              <div>
+                <p class="font-body text-[12px] font-semibold text-brand-warm uppercase tracking-wider mb-0.5">Email Inquiries</p>
+                <a href={`mailto:${safeData.email}`} class="font-body text-[14px] text-brand-dark hover:text-brand-warm transition-colors block">
+                  {safeData.email}
+                </a>
+              </div>
             </div>
-          </form>
-        </div>
 
-        {/* Contact Info (Bottom on mobile, Bottom-Left on desktop) */}
-        <div class="md:col-start-1 md:row-start-2 reveal flex justify-start self-start md:pt-6">
-          <div class="space-y-5 font-body text-[14px] text-brand-dark flex flex-col items-start w-max">
-            <div class="flex items-center gap-4">
-              <Mail className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
-              <a href="mailto:hello@mithera.com" class="hover:text-brand-accent transition-colors">hello@mithera.com</a>
-            </div>
-            <div class="flex items-center gap-4">
-              <Phone className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
-              <a href="tel:+919876543210" class="hover:text-brand-accent transition-colors">+91 98765 43210</a>
-            </div>
-            <div class="flex items-center gap-4">
-              <MapPin className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
-              <span>123 Artisan Bakery Lane, Mumbai</span>
+            <div class="flex items-start gap-3.5 text-brand-dark">
+              <Clock className="w-5 h-5 text-brand-warm shrink-0 mt-1" strokeWidth={1.5} />
+              <div>
+                <p class="font-body text-[12px] font-semibold text-brand-warm uppercase tracking-wider mb-0.5">Operating Hours</p>
+                <p class="font-body text-[14px] text-text-secondary leading-snug">
+                  {safeData.hours}
+                </p>
+                <span class="inline-block mt-1 text-[11px] font-semibold text-[#25D366] bg-[#25D366]/10 px-2 py-0.5 rounded">
+                  {safeData.hoursBadge}
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
+        {/* Contact Form (Right Column) */}
+        <div class="lg:col-span-7">
+          <div class="bg-white p-7 lg:p-9 rounded-[16px] border border-brand-warm/15 shadow-[0_4px_16px_rgba(58,36,26,0.04)]">
+            <h2 class="font-heading text-[24px] text-brand-dark mb-2">{safeData.formTitle}</h2>
+            <p class="font-body text-[13px] text-text-secondary mb-6">{safeData.formSubtitle}</p>
+            
+            <form id="contactForm" data-phone={cleanPhoneNum} class="font-body text-[13px] space-y-5">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label class="block text-[12px] font-semibold text-brand-dark mb-1">Full Name *</label>
+                  <input 
+                    id="contactName"
+                    required
+                    type="text" 
+                    placeholder="e.g. Priya Shah" 
+                    class="w-full bg-cream/30 border border-brand-dark/20 rounded-[8px] px-3.5 py-2.5 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm focus:ring-1 focus:ring-brand-warm transition-colors" 
+                  />
+                </div>
+                <div>
+                  <label class="block text-[12px] font-semibold text-brand-dark mb-1">Phone Number *</label>
+                  <input 
+                    id="contactPhone"
+                    required
+                    type="tel" 
+                    placeholder="+91 9930309063" 
+                    class="w-full bg-cream/30 border border-brand-dark/20 rounded-[8px] px-3.5 py-2.5 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm focus:ring-1 focus:ring-brand-warm transition-colors" 
+                  />
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label class="block text-[12px] font-semibold text-brand-dark mb-1">Email Address</label>
+                  <input 
+                    id="contactEmail"
+                    type="email" 
+                    placeholder="priya@example.com" 
+                    class="w-full bg-cream/30 border border-brand-dark/20 rounded-[8px] px-3.5 py-2.5 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm focus:ring-1 focus:ring-brand-warm transition-colors" 
+                  />
+                </div>
+                <div>
+                  <label class="block text-[12px] font-semibold text-brand-dark mb-1">Subject</label>
+                  <select 
+                    id="contactSubject"
+                    class="w-full bg-cream/30 border border-brand-dark/20 rounded-[8px] px-3.5 py-2.5 text-brand-dark focus:outline-none focus:border-brand-warm focus:ring-1 focus:ring-brand-warm transition-colors"
+                  >
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Bulk / Wedding Sweets">Bulk / Wedding Sweets</option>
+                    <option value="Bakery Custom Orders">Bakery Custom Orders</option>
+                    <option value="Delivery Status">Delivery Status</option>
+                    <option value="Feedback">Feedback</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[12px] font-semibold text-brand-dark mb-1">Your Message *</label>
+                <textarea 
+                  id="contactMessage"
+                  required
+                  rows="4" 
+                  placeholder="Tell us what you are looking for..." 
+                  class="w-full bg-cream/30 border border-brand-dark/20 rounded-[8px] px-3.5 py-2.5 text-brand-dark placeholder:text-text-muted focus:outline-none focus:border-brand-warm focus:ring-1 focus:ring-brand-warm transition-colors resize-none"
+                ></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button 
+                  type="submit" 
+                  class="w-full bg-[#25D366] text-white px-8 py-3.5 rounded-[8px] font-semibold hover:bg-[#1EBE5D] transition-all shadow-md flex items-center justify-center gap-2.5 cursor-pointer font-body text-[14px]"
+                >
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  </svg>
+                  Send via WhatsApp
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
       </div>
+
+      {/* Conditional FAQs */}
+      {safeData.faqs && safeData.faqs.length > 0 && (
+        <div class="mt-20">
+          <FaqSection client:visible faqs={safeData.faqs} title="Store & Visit Questions" tagline="Frequently Asked Questions" />
+        </div>
+      )}
+
+      {/* Conditional Descriptive Content */}
+      {safeData.descriptiveContent && (
+        <DescriptiveContent data={{ content: safeData.descriptiveContent }} />
+      )}
+
     </div>
   </main>
   
@@ -92,21 +214,27 @@ import { MapPin, Phone, Mail } from 'lucide-react';
 </BaseLayout>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.15
-    });
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const phoneDest = contactForm.getAttribute('data-phone') || '919930309063';
+      const name = (document.getElementById('contactName') as HTMLInputElement)?.value || '';
+      const phone = (document.getElementById('contactPhone') as HTMLInputElement)?.value || '';
+      const email = (document.getElementById('contactEmail') as HTMLInputElement)?.value || 'N/A';
+      const subject = (document.getElementById('contactSubject') as HTMLSelectElement)?.value || 'Inquiry';
+      const message = (document.getElementById('contactMessage') as HTMLTextAreaElement)?.value || '';
 
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach(el => observer.observe(el));
-  });
+      const text = `*New Website Inquiry*\n\n` +
+        `*Subject:* ${subject}\n` +
+        `*Name:* ${name}\n` +
+        `*Phone:* ${phone}\n` +
+        `*Email:* ${email}\n\n` +
+        `*Message:*\n${message}`;
+
+      const waUrl = `https://wa.me/${phoneDest}?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank');
+    });
+  }
 </script>
 

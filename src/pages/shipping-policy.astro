@@ -1,0 +1,91 @@
+---
+import { sanityClient } from '../lib/sanity';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+
+const entry = await sanityClient.fetch(`
+  *[_type == "legalPage" && slug.current in ["shipping-policy", "shipping-and-delivery-policy"]][0]
+`);
+
+const title = entry?.title || 'Shipping & Delivery Policy';
+const lastUpdated = entry?.lastUpdated || 'March 2026';
+const body = entry?.body || [];
+const faqs = entry?.faqs || [];
+const schemaJson = entry?.schemaJson;
+---
+
+<BaseLayout 
+  title={`${title} | Mithera Sweets & Bakery`}
+  description={entry?.metaDescription || "Information on shipping, delivery timeframes, free delivery options, and Mumbai local coverage for Mithera Sweets & Bakery."}
+  schemaJson={schemaJson}
+>
+  <div class="pt-[110px] lg:pt-[130px] pb-20 bg-cream min-h-screen">
+    <div class="container max-w-[840px] px-4">
+      
+      {/* Header */}
+      <div class="border-b border-brand-dark/15 pb-6 mb-8">
+        <span class="text-xs font-semibold tracking-[0.2em] uppercase text-brand-warm block mb-2 font-body">Mithera Sweets Policies</span>
+        <h1 class="font-heading text-[34px] lg:text-[46px] text-brand-dark leading-tight mb-2">{title}</h1>
+        <p class="font-body text-[13px] text-text-muted">Last Updated: {lastUpdated}</p>
+      </div>
+
+      {/* Main Legal Content */}
+      <div class="font-body text-[14px] lg:text-[15px] text-text-secondary space-y-4 leading-relaxed prose max-w-none
+        prose-h2:font-heading prose-h2:text-[22px] prose-h2:text-brand-dark prose-h2:mt-8 prose-h2:mb-3
+        prose-p:text-text-secondary prose-p:text-[14px] prose-p:leading-[1.7]">
+        {body.length > 0 ? (
+          <div set:html={body.map((block: any) => {
+            if (block._type === 'block') {
+              const text = block.children?.map((c: any) => c.text).join('') || '';
+              if (block.style === 'h2') return `<h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">${text}</h2>`;
+              return `<p class="mb-4 text-[#6D5E54] leading-[1.7]">${text}</p>`;
+            }
+            return '';
+          }).join('')} />
+        ) : (
+          <>
+            <p>We take great pride in delivering fresh, handcrafted mithai and bakery goods safely to your doorstep. Here are the details of our delivery operations.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">1. Local Mumbai Delivery</h2>
+            <p>Same-day or next-day express delivery is available across Mumbai, Kandivali, Borivali, and nearby suburbs. Orders placed before 4:00 PM are typically dispatched the same day.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">2. Free Delivery Threshold</h2>
+            <p>Enjoy Free Delivery on all retail orders above ₹500 across Mumbai. For orders below ₹500, nominal standard courier or hyperlocal delivery charges apply.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">3. Pan-India Delivery & Gifting</h2>
+            <p>For dry sweets, cookies, dragees, and gift hampers, nationwide express courier shipping (air cargo) takes 2-4 business days. Temperature-sensitive milk sweets are restricted to local delivery.</p>
+          </>
+        )}
+      </div>
+
+      {/* Optional Policy FAQs */}
+      {faqs && faqs.length > 0 && (
+        <div class="mt-12 pt-8 border-t border-brand-dark/15">
+          <h2 class="font-heading text-[24px] text-brand-dark mb-6">Frequently Asked Questions</h2>
+          <div class="space-y-4">
+            {faqs.map((faq: any) => (
+              <div class="bg-white/80 rounded-lg p-5 border border-brand-warm/15 shadow-sm">
+                <h3 class="font-heading text-[17px] text-brand-dark font-medium mb-2">{faq.question}</h3>
+                <p class="font-body text-[14px] text-text-secondary leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Help Banner */}
+      <div class="mt-12 p-6 rounded-xl bg-white border border-[#8C6A4A]/20 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <div>
+          <h3 class="font-heading text-[18px] text-brand-dark mb-1">Check delivery status for your area?</h3>
+          <p class="font-body text-[13px] text-text-secondary">Message us directly on WhatsApp with your pincode for immediate delivery estimates.</p>
+        </div>
+        <a 
+          href="https://wa.me/919930309063?text=Hi%20Mithera,%20can%20you%20check%20delivery%20for%20my%20pincode?" 
+          target="_blank"
+          class="shrink-0 inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-dark text-white font-body text-[13px] font-medium hover:bg-brand-hover transition-colors shadow-sm"
+        >
+          Check Pincode
+        </a>
+      </div>
+
+    </div>
+  </div>
+  <Footer />
+</BaseLayout>

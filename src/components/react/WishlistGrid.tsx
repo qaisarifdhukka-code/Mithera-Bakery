@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { wishlistStore } from '../../store/wishlist';
-import { allProducts } from '../../data/products';
 import { Star, Heart } from 'lucide-react';
 import AddToCartButton from './AddToCartButton';
 import WishlistButton from './WishlistButton';
 
-export default function WishlistGrid() {
+export default function WishlistGrid({ products = [] }: { products?: any[] }) {
   const [wishedIds, setWishedIds] = useState<number[]>([]);
   const [mounted, setMounted] = useState(false);
 
@@ -19,7 +18,7 @@ export default function WishlistGrid() {
 
   if (!mounted) return null; // Avoid hydration mismatch
 
-  const wishedProducts = allProducts.filter(p => wishedIds.includes(p.id));
+  const wishedProducts = products.filter(p => wishedIds.includes(p.id));
 
   if (wishedProducts.length === 0) {
     return (

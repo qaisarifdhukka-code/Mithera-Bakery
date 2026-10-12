@@ -1,5 +1,6 @@
 ---
 import PromoSlider from './react/PromoSlider';
+const { data } = Astro.props;
 ---
 
 <style>
@@ -11,4 +12,4 @@ import PromoSlider from './react/PromoSlider';
   }
 </style>
 
-<PromoSlider client:load />
+<PromoSlider client:load data={data} />

@@ -1,4 +1,24 @@
-export const categories = ['All', 'Indian Sweets', 'Bakery Items', 'Cookies & Biscuits', 'Gift Hampers'];
+export const categories = [
+  'All',
+  'Pure Milk Barfi',
+  'Peda\'s',
+  'Ladu',
+  'Natural Sweets',
+  'Dry Fruit Sweets',
+  'Halwa\'s',
+  'Bengali Sweets',
+  'Gifting',
+  'Dragees',
+  'Chakli & Sticks',
+  'Dryfruit',
+  'Chikki & Gajak',
+  'Cookies',
+  'Chocolates',
+  'Namkeen',
+  'Khakhara\'s',
+  'Mukhwas',
+  'Sharbat'
+];
 
 export const allProducts = [
   { 

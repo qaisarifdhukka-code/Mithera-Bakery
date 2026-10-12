@@ -1,4 +1,5 @@
 ---
+import { sanityClient, urlFor } from '../lib/sanity';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
 import HeroSection from '../components/react/HeroSection';
@@ -6,41 +7,76 @@ import CategoriesSection from '../components/CategoriesSection.astro';
 import BestsellersSection from '../components/BestsellersSection.astro';
 import PromoBannersSection from '../components/PromoBannersSection.astro';
 import TestimonialsSection from '../components/react/TestimonialsSection';
+import SocialVideoSection from '../components/react/SocialVideoSection';
+import FaqSection from '../components/react/FaqSection';
 import CtaSection from '../components/CtaSection.astro';
+
+const homeData = await sanityClient.fetch(`*[_type == "homePage"][0]`);
+
+// Resolve image URLs for sections that use images
+const hero = homeData?.hero ? {
+  ...homeData.hero,
+  desktopImage: urlFor(homeData.hero.desktopImage),
+  mobileImage: urlFor(homeData.hero.mobileImage),
+} : undefined;
+
+const categoriesSection = homeData?.categoriesSection ? {
+  ...homeData.categoriesSection,
+  items: (homeData.categoriesSection.items || []).map((item: any) => ({
+    ...item,
+    image: urlFor(item.image),
+  })),
+} : undefined;
+
+const promosSection = (homeData?.promosSection || []).map((promo: any) => ({
+  ...promo,
+  image: urlFor(promo.image),
+}));
+
+const videoSection = homeData?.videoSection ? {
+  ...homeData.videoSection,
+  videos: (homeData.videoSection.videos || []).map((v: any) => ({
+    ...v,
+    thumbnail: v.thumbnail ? urlFor(v.thumbnail) : undefined,
+  }))
+} : undefined;
+
+const ctaSection = homeData?.ctaSection ? {
+  ...homeData.ctaSection,
+  leftImage: urlFor(homeData.ctaSection.leftImage),
+  rightImage: urlFor(homeData.ctaSection.rightImage),
+} : undefined;
 ---
 
-<BaseLayout title="Mithera Bakery & Patisserie | Traditional Flavours, Modern Craftsmanship">
-<main>
-    <HeroSection client:load />
-    <CategoriesSection />
-    <BestsellersSection />
-    <PromoBannersSection />
-    <TestimonialsSection client:load />
-    <CtaSection />
+<BaseLayout 
+  title={homeData?.title || "Mithera Sweets & Bakery | Handcrafted Sweets & Artisanal Bakes"}
+  description={homeData?.metaDescription}
+  schemaJson={homeData?.schemaJson}
+>
+  <main class="bg-cream">
+    <HeroSection client:load data={hero} />
+    <CategoriesSection data={categoriesSection} />
+    <BestsellersSection data={homeData?.bestsellersSection} />
+    <PromoBannersSection data={promosSection} />
+    <SocialVideoSection client:load data={videoSection} />
+    <TestimonialsSection client:load data={homeData?.testimonialsSection} />
+    <FaqSection client:load data={homeData?.faqsSection} />
+    <CtaSection data={ctaSection} />
   </main>
   
   <Footer />
 </BaseLayout>
 
 <script>
-  // Intersection Observer for scroll animations
   document.addEventListener("DOMContentLoaded", () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          // Optional: stop observing once revealed
-          // observer.unobserve(entry.target); 
         }
       });
-    }, {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.15
-    });
-
+    }, { root: null, rootMargin: "0px", threshold: 0.15 });
     const revealElements = document.querySelectorAll('.reveal');
     revealElements.forEach(el => observer.observe(el));
   });
 </script>
-

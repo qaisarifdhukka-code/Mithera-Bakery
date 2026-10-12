@@ -1,66 +1,154 @@
 ---
+import { sanityClient, urlFor } from '../lib/sanity';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, CheckCircle2, Gift, Sparkles, Building2, HeartHandshake } from 'lucide-react';
 import GiftingForm from '../components/react/GiftingForm';
+import FaqSection from '../components/react/FaqSection';
+import DescriptiveContent from '../components/DescriptiveContent.astro';
+
+const giftingData = await sanityClient.fetch(`*[_type == "giftingPage"][0]`);
+
+const defaultBoxes = [
+  {
+    title: "Signature Mithai Box",
+    desc: "A rich assortment of Kaju Katli, Mava Barfi, and Peda packed in an opulent gold foil box.",
+    tag: "Most Popular",
+    image: "/images/hero-image.png"
+  },
+  {
+    title: "Festive Grand Hamper",
+    desc: "A royal celebration hamper combining premium dry fruits, artisanal laddoos, and handcrafted cookies.",
+    tag: "Festive Exclusive",
+    image: "/images/1 (2).png"
+  },
+  {
+    title: "Bespoke Corporate Executive",
+    desc: "Customized rigid box with embossed corporate logo, personalized message cards, and gourmet confections.",
+    tag: "Bespoke Branding",
+    image: "/images/1 (1).png"
+  }
+];
+
+const defaultFeatures = [
+  "Custom luxury box branding with your company logo",
+  "Curated assortments of traditional & modern artisanal sweets",
+  "Hygienically packaged with tamper-proof seal",
+  "Doorstep delivery across Mumbai & nationwide express shipping",
+  "Dedicated corporate accounts manager for seamless coordination",
+  "Flexible volume tiers & special enterprise pricing"
+];
+
+const safeData = {
+  heroTagline: giftingData?.heroTagline || "Bespoke Gifting Solutions",
+  heroHeading: giftingData?.heroHeading || "Corporate & Festive Gifting",
+  heroSubtext: giftingData?.heroSubtext || "Leave a lasting impression with Mithera's artisanal sweets and bespoke packaging, tailored exclusively for your corporate partners, clients, and celebrations.",
+  featuresHeading: giftingData?.featuresHeading || "Crafted for Every Occasion",
+  featuresSubtext: giftingData?.featuresSubtext || "Whether it's Diwali, wedding invitations, executive milestones, or client appreciation, our gifting catalogue offers handcrafted perfection with customizable branding.",
+  features: (giftingData?.features && giftingData.features.length > 0) ? giftingData.features : defaultFeatures,
+  deskTitle: giftingData?.deskTitle || "Direct Gifting Desk",
+  deskSubtext: giftingData?.deskSubtext || "Have an urgent requirement or custom inquiry? Speak directly with our gifting consultant.",
+  deskPhone: giftingData?.deskPhone || "+91 9930309063",
+  deskEmail: giftingData?.deskEmail || "mitherasweets@gmail.com",
+  deskAddress: giftingData?.deskAddress || "Shop No. 13 & 14, Pooja Enclave, Kandivali West, Mumbai 400067",
+  faqs: giftingData?.faqs || [],
+  descriptiveContent: giftingData?.descriptiveContent || "",
+  seoTitle: giftingData?.seoTitle || "Corporate & Festive Gifting | Mithera Sweets & Bakery",
+  seoDescription: giftingData?.seoDescription || "Handcrafted sweets and bespoke gifting boxes tailored for corporate occasions, festive celebrations, and weddings by Mithera Sweets.",
+  schemaJson: giftingData?.schemaJson,
+};
+
+const giftingBoxes = (giftingData?.boxes && giftingData.boxes.length > 0)
+  ? giftingData.boxes.map((box: any, idx: number) => ({
+      title: box.title || defaultBoxes[idx]?.title || "Gift Box",
+      desc: box.desc || defaultBoxes[idx]?.desc || "",
+      tag: box.tag || defaultBoxes[idx]?.tag || "Exclusive",
+      image: box.image ? urlFor(box.image) : (defaultBoxes[idx]?.image || "/images/hero-image.png")
+    }))
+  : defaultBoxes;
 ---
 
-<BaseLayout title="Corporate Gifting | Mithera Bakery & Patisserie">
-<main class="bg-cream min-h-screen pt-16 lg:pt-24 pb-20 lg:pb-32">
+<BaseLayout 
+  title={safeData.seoTitle}
+  description={safeData.seoDescription}
+  schemaJson={safeData.schemaJson}
+>
+  <main class="bg-cream min-h-screen pt-12 lg:pt-16 pb-20">
     <div class="container max-w-6xl mx-auto px-4">
       
-      {/* Title Section (Matches Our Menu / Contact) */}
-      <div class="mb-20">
-        <h1 class="font-heading text-[48px] lg:text-[56px] text-brand-dark mb-4 leading-tight">Corporate Gifting</h1>
-        <p class="font-body text-[15px] lg:text-[16px] text-text-secondary max-w-2xl">
-          Leave a lasting impression with Mithera's artisanal sweets and bespoke packaging, tailored exclusively for your business partners and employees.
+      {/* Title Section */}
+      <div class="text-center max-w-3xl mx-auto mb-14 lg:mb-16">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-brand-warm/15 text-brand-dark text-[12px] font-semibold uppercase tracking-wider mb-3 font-body">
+          <Gift className="w-3.5 h-3.5 text-brand-warm" /> {safeData.heroTagline}
+        </span>
+        <h1 class="font-heading text-[38px] lg:text-[52px] text-brand-dark mb-4 leading-tight">{safeData.heroHeading}</h1>
+        <p class="font-body text-[15px] lg:text-[17px] text-text-secondary leading-relaxed">
+          {safeData.heroSubtext}
         </p>
       </div>
 
-      {/* Main Content Layout (Matches Let's Talk layout) */}
-      <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
+      {/* Featured Gifting Options Showcase */}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        {giftingBoxes.map((box: any) => (
+          <div class="bg-white rounded-[16px] overflow-hidden border border-brand-warm/15 shadow-[0_4px_16px_rgba(58,36,26,0.04)] flex flex-col group hover:-translate-y-1 transition-all duration-300">
+            <div class="h-[180px] bg-cream relative overflow-hidden">
+              <span class="absolute top-3 left-3 z-10 bg-brand-dark text-cream text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full font-body">
+                {box.tag}
+              </span>
+              <img 
+                src={box.image} 
+                alt={box.title} 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+              />
+            </div>
+            <div class="p-5 flex flex-col grow justify-between">
+              <div>
+                <h3 class="font-heading text-[18px] text-brand-dark mb-1.5">{box.title}</h3>
+                <p class="font-body text-[13px] text-text-secondary leading-relaxed">{box.desc}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Main Content Layout */}
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
         
         {/* Left Side: Information */}
-        <div class="w-full lg:w-5/12 flex flex-col gap-12">
+        <div class="w-full lg:w-5/12 flex flex-col gap-8">
           
-          <div>
-            <h2 class="font-heading text-[28px] text-brand-dark mb-4">Tailored to Perfection</h2>
+          <div class="bg-white p-6 sm:p-8 rounded-[16px] border border-brand-warm/15 shadow-[0_4px_16px_rgba(58,36,26,0.04)]">
+            <h2 class="font-heading text-[24px] text-brand-dark mb-3">{safeData.featuresHeading}</h2>
             <p class="font-body text-[14px] text-text-secondary leading-relaxed mb-6">
-              Whether it's Diwali, employee onboarding, client appreciation, or festive celebrations, our corporate gifting catalog offers something extraordinary for every occasion.
+              {safeData.featuresSubtext}
             </p>
             
-            <ul class="font-body text-[14px] text-brand-dark space-y-3">
-              <li class="flex items-center gap-3">
-                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
-                Custom packaging with your company logo
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
-                Curated assortments of traditional & modern sweets
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
-                Volume discounts for large-scale orders
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="w-1.5 h-1.5 bg-[#DBA540] rounded-full"></span> 
-                Seamless multi-point Pan-India delivery
-              </li>
+            <ul class="font-body text-[13px] text-brand-dark space-y-3">
+              {safeData.features.map((feature: string) => (
+                <li class="flex items-start gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-brand-warm shrink-0 mt-0.5" /> 
+                  <span class="leading-snug">{feature}</span>
+                </li>
+              ))}
             </ul>
           </div>
 
-          <div class="flex flex-col gap-4">
-            <div class="flex items-center gap-4 text-brand-dark">
-              <Mail class="w-5 h-5 text-[#DBA540]" strokeWidth={1.5} />
-              <span class="font-body text-[14px]">corporate@mithera.com</span>
+          {/* Contact Box */}
+          <div class="bg-white p-6 rounded-[16px] border border-brand-warm/15 shadow-[0_4px_16px_rgba(58,36,26,0.04)] space-y-4">
+            <h3 class="font-heading text-[18px] text-brand-dark mb-1">{safeData.deskTitle}</h3>
+            <p class="font-body text-[12px] text-text-secondary">{safeData.deskSubtext}</p>
+            
+            <div class="flex items-center gap-3 text-brand-dark">
+              <Phone className="w-4 h-4 text-brand-warm shrink-0" strokeWidth={1.5} />
+              <a href={`tel:${safeData.deskPhone.replace(/\s+/g, '')}`} class="font-body text-[14px] font-semibold hover:text-brand-warm transition-colors">{safeData.deskPhone}</a>
             </div>
-            <div class="flex items-center gap-4 text-brand-dark">
-              <Phone class="w-5 h-5 text-[#DBA540]" strokeWidth={1.5} />
-              <span class="font-body text-[14px]">+91 91523 19661</span>
+            <div class="flex items-center gap-3 text-brand-dark">
+              <Mail className="w-4 h-4 text-brand-warm shrink-0" strokeWidth={1.5} />
+              <a href={`mailto:${safeData.deskEmail}`} class="font-body text-[14px] hover:text-brand-warm transition-colors">{safeData.deskEmail}</a>
             </div>
-            <div class="flex items-center gap-4 text-brand-dark">
-              <MapPin class="w-5 h-5 text-[#DBA540]" strokeWidth={1.5} />
-              <span class="font-body text-[14px]">123 Artisan Bakery Lane, Mumbai</span>
+            <div class="flex items-start gap-3 text-brand-dark">
+              <MapPin className="w-4 h-4 text-brand-warm shrink-0 mt-0.5" strokeWidth={1.5} />
+              <span class="font-body text-[13px] text-text-secondary leading-snug">{safeData.deskAddress}</span>
             </div>
           </div>
 
@@ -74,6 +162,18 @@ import GiftingForm from '../components/react/GiftingForm';
       </div>
       
     </div>
+
+    {/* Conditional FAQs */}
+    {safeData.faqs && safeData.faqs.length > 0 && (
+      <div class="mt-20">
+        <FaqSection client:visible faqs={safeData.faqs} title="Gifting Frequently Asked Questions" tagline="Bulk Inquiries" />
+      </div>
+    )}
+
+    {/* Conditional Descriptive Content */}
+    {safeData.descriptiveContent && (
+      <DescriptiveContent data={{ content: safeData.descriptiveContent }} />
+    )}
   </main>
   
   <Footer />

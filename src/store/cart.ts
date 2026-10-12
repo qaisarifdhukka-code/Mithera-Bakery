@@ -63,7 +63,7 @@ export function parsePrice(priceStr: string): number {
 }
 
 export function getWhatsAppCheckoutUrl(cart: CartItem[]): string {
-  const WA_NUMBER = "919152319661";
+  const WA_NUMBER = "919930309063";
   let text = "Hello Mithera Sweets! I would like to place an order:\n\n";
   let total = 0;
 
@@ -81,7 +81,7 @@ export function getWhatsAppCheckoutUrl(cart: CartItem[]): string {
 }
 
 export function getWhatsAppBuyNowUrl(item: CartItem): string {
-  const WA_NUMBER = "919152319661";
+  const WA_NUMBER = "919930309063";
   let text = `Hello Mithera Sweets! I would like to order:\n\n`;
   const itemTotal = item.price * item.quantity;
   text += `*${item.name}* (${item.weight})\n`;

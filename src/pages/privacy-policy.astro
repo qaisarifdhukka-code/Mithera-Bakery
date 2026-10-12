@@ -1,27 +1,91 @@
 ---
+import { sanityClient } from '../lib/sanity';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
+
+const entry = await sanityClient.fetch(`
+  *[_type == "legalPage" && slug.current == "privacy-policy"][0]
+`);
+
+const title = entry?.title || 'Privacy Policy';
+const lastUpdated = entry?.lastUpdated || 'March 2026';
+const body = entry?.body || [];
+const faqs = entry?.faqs || [];
+const schemaJson = entry?.schemaJson;
 ---
 
-<BaseLayout title="Privacy Policy - Mithera Sweets">
-  <div class="pt-[140px] pb-20 bg-cream min-h-screen">
-    <div class="container max-w-[800px]">
-      <h1 class="font-heading text-[32px] lg:text-[42px] text-brand-dark mb-8">Privacy Policy</h1>
-      <div class="font-body text-[14px] text-text-secondary space-y-6">
-        <p>At Mithera Sweets, we are committed to protecting your privacy and ensuring the security of your personal information.</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">1. Information We Collect</h2>
-        <p>We collect information that you provide directly to us when you make a purchase, create an account, or contact us. This may include your name, email address, phone number, shipping address, and payment information.</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">2. How We Use Your Information</h2>
-        <p>We use the information we collect to process your orders, communicate with you about our products and services, and improve our website and customer experience.</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">3. Information Sharing</h2>
-        <p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties except as necessary to provide our services (e.g., shipping partners, payment processors).</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">4. Data Security</h2>
-        <p>We implement a variety of security measures to maintain the safety of your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure.</p>
+<BaseLayout 
+  title={`${title} | Mithera Sweets & Bakery`}
+  description={entry?.metaDescription || "Privacy policy for Mithera Sweets & Bakery. Learn how we handle and protect your personal information."}
+  schemaJson={schemaJson}
+>
+  <div class="pt-[110px] lg:pt-[130px] pb-20 bg-cream min-h-screen">
+    <div class="container max-w-[840px] px-4">
+      
+      {/* Header */}
+      <div class="border-b border-brand-dark/15 pb-6 mb-8">
+        <span class="text-xs font-semibold tracking-[0.2em] uppercase text-brand-warm block mb-2 font-body">Mithera Sweets Policies</span>
+        <h1 class="font-heading text-[34px] lg:text-[46px] text-brand-dark leading-tight mb-2">{title}</h1>
+        <p class="font-body text-[13px] text-text-muted">Last Updated: {lastUpdated}</p>
       </div>
+
+      {/* Main Legal Content */}
+      <div class="font-body text-[14px] lg:text-[15px] text-text-secondary space-y-4 leading-relaxed prose max-w-none
+        prose-h2:font-heading prose-h2:text-[22px] prose-h2:text-brand-dark prose-h2:mt-8 prose-h2:mb-3
+        prose-p:text-text-secondary prose-p:text-[14px] prose-p:leading-[1.7]">
+        {body.length > 0 ? (
+          <div set:html={body.map((block: any) => {
+            if (block._type === 'block') {
+              const text = block.children?.map((c: any) => c.text).join('') || '';
+              if (block.style === 'h2') return `<h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">${text}</h2>`;
+              return `<p class="mb-4 text-[#6D5E54] leading-[1.7]">${text}</p>`;
+            }
+            return '';
+          }).join('')} />
+        ) : (
+          <>
+            <p>At Mithera Sweets, accessible from our official website, one of our main priorities is the privacy of our visitors. This Privacy Policy document explains the types of information that is collected and recorded by Mithera and how we use it.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">1. Information We Collect</h2>
+            <p>We collect information that you provide directly to us when you make a purchase, place a WhatsApp order, or contact us. This includes your name, delivery address, phone number, and email address.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">2. How We Use Your Information</h2>
+            <p>We use the information we collect to process your orders, coordinate dispatch with delivery riders, and communicate with you about your order status.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">3. Information Sharing</h2>
+            <p>We do not sell, trade, or rent your personally identifiable information to outside third parties.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">4. Data Security</h2>
+            <p>We implement appropriate technical measures to maintain the safety of your personal information.</p>
+          </>
+        )}
+      </div>
+
+      {/* Optional FAQs */}
+      {faqs && faqs.length > 0 && (
+        <div class="mt-12 pt-8 border-t border-brand-dark/15">
+          <h2 class="font-heading text-[24px] text-brand-dark mb-6">Frequently Asked Questions</h2>
+          <div class="space-y-4">
+            {faqs.map((faq: any) => (
+              <div class="bg-white/80 rounded-lg p-5 border border-brand-warm/15 shadow-sm">
+                <h3 class="font-heading text-[17px] text-brand-dark font-medium mb-2">{faq.question}</h3>
+                <p class="font-body text-[14px] text-text-secondary leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Help Banner */}
+      <div class="mt-12 p-6 rounded-xl bg-white border border-[#8C6A4A]/20 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <div>
+          <h3 class="font-heading text-[18px] text-brand-dark mb-1">Questions about your privacy?</h3>
+          <p class="font-body text-[13px] text-text-secondary">Reach out to our grievance officer at mitherasweets@gmail.com</p>
+        </div>
+        <a 
+          href="mailto:mitherasweets@gmail.com" 
+          class="shrink-0 inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-dark text-white font-body text-[13px] font-medium hover:bg-brand-hover transition-colors shadow-sm"
+        >
+          Email Us
+        </a>
+      </div>
+
     </div>
   </div>
   <Footer />

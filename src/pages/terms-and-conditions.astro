@@ -1,24 +1,90 @@
 ---
+import { sanityClient } from '../lib/sanity';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
+
+const entry = await sanityClient.fetch(`
+  *[_type == "legalPage" && slug.current == "terms-and-conditions"][0]
+`);
+
+const title = entry?.title || 'Terms & Conditions';
+const lastUpdated = entry?.lastUpdated || 'March 2026';
+const body = entry?.body || [];
+const faqs = entry?.faqs || [];
+const schemaJson = entry?.schemaJson;
 ---
 
-<BaseLayout title="Terms & Conditions - Mithera Sweets">
-  <div class="pt-[140px] pb-20 bg-cream min-h-screen">
-    <div class="container max-w-[800px]">
-      <h1 class="font-heading text-[32px] lg:text-[42px] text-brand-dark mb-8">Terms & Conditions</h1>
-      <div class="font-body text-[14px] text-text-secondary space-y-6">
-        <p>Welcome to Mithera Sweets. By accessing and using our website, you agree to comply with and be bound by the following terms and conditions.</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">1. Product Information</h2>
-        <p>We strive to ensure that all details, descriptions, and prices of products appearing on the website are accurate. However, errors may occur. We reserve the right to correct any errors and to change or update information at any time without prior notice.</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">2. Orders and Payments</h2>
-        <p>All orders are subject to acceptance and availability. Prices are subject to change without notice. Payment must be received in full before an order is processed and shipped.</p>
-        
-        <h2 class="text-[18px] font-semibold text-brand-dark mt-8 mb-4">3. Shipping and Delivery</h2>
-        <p>We aim to deliver products within the estimated timeframes; however, delays are occasionally inevitable due to unforeseen factors. We shall be under no liability for any delay or failure to deliver the products within estimated timescales.</p>
+<BaseLayout 
+  title={`${title} | Mithera Sweets & Bakery`}
+  description={entry?.metaDescription || "Terms and conditions for ordering and using the Mithera Sweets website and services."}
+  schemaJson={schemaJson}
+>
+  <div class="pt-[110px] lg:pt-[130px] pb-20 bg-cream min-h-screen">
+    <div class="container max-w-[840px] px-4">
+      
+      {/* Header */}
+      <div class="border-b border-brand-dark/15 pb-6 mb-8">
+        <span class="text-xs font-semibold tracking-[0.2em] uppercase text-brand-warm block mb-2 font-body">Mithera Sweets Policies</span>
+        <h1 class="font-heading text-[34px] lg:text-[46px] text-brand-dark leading-tight mb-2">{title}</h1>
+        <p class="font-body text-[13px] text-text-muted">Last Updated: {lastUpdated}</p>
       </div>
+
+      {/* Main Legal Content */}
+      <div class="font-body text-[14px] lg:text-[15px] text-text-secondary space-y-4 leading-relaxed prose max-w-none
+        prose-h2:font-heading prose-h2:text-[22px] prose-h2:text-brand-dark prose-h2:mt-8 prose-h2:mb-3
+        prose-p:text-text-secondary prose-p:text-[14px] prose-p:leading-[1.7]">
+        {body.length > 0 ? (
+          <div set:html={body.map((block: any) => {
+            if (block._type === 'block') {
+              const text = block.children?.map((c: any) => c.text).join('') || '';
+              if (block.style === 'h2') return `<h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">${text}</h2>`;
+              return `<p class="mb-4 text-[#6D5E54] leading-[1.7]">${text}</p>`;
+            }
+            return '';
+          }).join('')} />
+        ) : (
+          <>
+            <p>Welcome to Mithera Sweets & Bakery. By accessing our website, browsing our menu, or placing orders via our website or direct WhatsApp checkout, you agree to comply with and be bound by the following terms and conditions.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">1. Product Availability & Pricing</h2>
+            <p>Because our sweets and bakery treats are freshly prepared daily in small artisanal batches, all products are subject to daily availability. While we strive to maintain accurate pricing on our site, prices are subject to change without prior notice.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">2. Orders & Order Confirmation</h2>
+            <p>Orders placed on the website generate a WhatsApp inquiry or direct order dispatch request. An order is considered confirmed once our team verifies stock and receives payment confirmation.</p>
+            <h2 class="font-heading text-[22px] text-[#3A241A] mt-8 mb-3 font-semibold">3. Shelf Life & Quality</h2>
+            <p>Our traditional sweets are made without artificial chemical preservatives. Customers are advised to store products as instructed on the packaging and consume them within the suggested timeframe for optimal flavor and freshness.</p>
+          </>
+        )}
+      </div>
+
+      {/* Optional FAQs */}
+      {faqs && faqs.length > 0 && (
+        <div class="mt-12 pt-8 border-t border-brand-dark/15">
+          <h2 class="font-heading text-[24px] text-brand-dark mb-6">Frequently Asked Questions</h2>
+          <div class="space-y-4">
+            {faqs.map((faq: any) => (
+              <div class="bg-white/80 rounded-lg p-5 border border-brand-warm/15 shadow-sm">
+                <h3 class="font-heading text-[17px] text-brand-dark font-medium mb-2">{faq.question}</h3>
+                <p class="font-body text-[14px] text-text-secondary leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Help Banner */}
+      <div class="mt-12 p-6 rounded-xl bg-white border border-[#8C6A4A]/20 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <div>
+          <h3 class="font-heading text-[18px] text-brand-dark mb-1">Have questions regarding our terms?</h3>
+          <p class="font-body text-[13px] text-text-secondary">Feel free to contact us on WhatsApp or email.</p>
+        </div>
+        <a 
+          href="https://wa.me/919930309063" 
+          target="_blank"
+          class="shrink-0 inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-dark text-white font-body text-[13px] font-medium hover:bg-brand-hover transition-colors shadow-sm"
+        >
+          Contact Us
+        </a>
+      </div>
+
     </div>
   </div>
   <Footer />

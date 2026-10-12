@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X } from 'lucide-react';
-import { allProducts } from '../../data/products';
 
-export default function SearchOverlay() {
+export default function SearchOverlay({ products = [] }: { products?: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +25,7 @@ export default function SearchOverlay() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const results = allProducts.filter(p => 
+  const results = products.filter(p => 
     p.name.toLowerCase().includes(query.toLowerCase()) || 
     p.category.toLowerCase().includes(query.toLowerCase())
   );

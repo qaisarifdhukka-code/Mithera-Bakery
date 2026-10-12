@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Star, Search, Filter } from 'lucide-react';
-import { categories, allProducts } from '../../data/products';
+import { categories } from '../../data/products';
 import WishlistButton from './WishlistButton';
 
-export default function ShopFilter() {
+export default function ShopFilter({ products = [] }: { products?: any[] }) {
+  const masterCategories = ['All', 'Indian Sweets', 'Mithai Boxes', 'Bakery Items', 'Cookies & Biscuits', 'Puffs & Savouries', 'Gift Hampers'];
+  const productCategories = Array.from(new Set(products.map(p => p.category).filter(Boolean)));
+  const filterCategories = ['All', ...Array.from(new Set([...masterCategories.slice(1), ...productCategories]))];
+
   const [activeCategory, setActiveCategory] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -15,7 +19,7 @@ export default function ShopFilter() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Filter logic
-  const filteredProducts = allProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     const matchesCategory = activeCategory === 'All' || product.category === activeCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -66,7 +70,7 @@ export default function ShopFilter() {
             <>
               <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
               <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[16px] border border-brand-dark/10 shadow-lg z-50 overflow-hidden py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                {categories.map((category) => (
+                {filterCategories.map((category) => (
                   <button
                     key={category}
                     onClick={() => {
@@ -89,7 +93,7 @@ export default function ShopFilter() {
 
         {/* Categories Pills (Desktop) */}
         <div className="hidden md:flex flex-wrap gap-2 lg:gap-3 mb-10 pb-2">
-          {categories.map((category) => (
+          {filterCategories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
@@ -121,18 +125,24 @@ export default function ShopFilter() {
                     loading="lazy"
                   />
                   {/* Category Tag overlay on hover */}
-                  <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[9px] font-semibold text-brand-dark uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {product.category}
-                  </div>
+                  {product.category && (
+                    <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[9px] font-semibold text-brand-dark uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {product.category}
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col p-2 lg:p-[12px] grow">
                   <h3 className="font-body text-[11px] lg:text-[13px] font-semibold text-brand-dark mb-1 leading-tight">{product.name}</h3>
                   <p className="font-body text-[11px] lg:text-[13px] font-semibold text-brand-dark mb-1.5 lg:mb-2">{product.price}</p>
-                  <div className="flex items-center gap-1 mb-auto pb-2">
-                    <Star className="w-[10px] h-[10px] lg:w-[12px] lg:h-[12px] text-brand-gold fill-brand-gold" strokeWidth={1} />
-                    <span className="font-body text-[9px] lg:text-[11px] font-medium text-text-secondary">{product.rating}</span>
-                    <span className="font-body text-[9px] lg:text-[11px] font-medium text-text-secondary">({product.reviews})</span>
-                  </div>
+                  {product.rating ? (
+                    <div className="flex items-center gap-1 mb-auto pb-2">
+                      <Star className="w-[10px] h-[10px] lg:w-[12px] lg:h-[12px] text-brand-gold fill-brand-gold" strokeWidth={1} />
+                      <span className="font-body text-[9px] lg:text-[11px] font-medium text-text-secondary">{product.rating}</span>
+                      {product.reviews && <span className="font-body text-[9px] lg:text-[11px] font-medium text-text-secondary">({product.reviews})</span>}
+                    </div>
+                  ) : (
+                    <div className="h-3 mb-auto" />
+                  )}
                   <button 
                     onClick={(e) => { 
                       e.preventDefault(); 

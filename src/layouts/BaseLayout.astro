@@ -13,15 +13,18 @@ import '@fontsource/poppins/700.css';
 
 import AnnouncementBar from '../components/AnnouncementBar.astro';
 import Navbar from '../components/Navbar.astro';
+import FloatingContactBar from '../components/react/FloatingContactBar';
 
 interface Props {
   title: string;
   description?: string;
+  schemaJson?: string;
 }
 
 const { 
   title, 
-  description = "Mithera – Premium Indian sweets, freshly baked goods, cookies, gift hampers & more. Traditional flavours with modern craftsmanship, delivered to your door." 
+  description = "Mithera – Premium Indian sweets, freshly baked goods, cookies, gift hampers & more. Traditional flavours with modern craftsmanship, delivered to your door.",
+  schemaJson
 } = Astro.props;
 ---
 
@@ -31,8 +34,8 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="Indian sweets, bakery, mithai, gift hampers, cookies, croissants, Mithera, Mumbai bakery" />
-    <meta name="author" content="Mithera" />
+    <meta name="keywords" content="Indian sweets, bakery, mithai, gift hampers, cookies, croissants, Mithera, Mumbai bakery, Kandivali" />
+    <meta name="author" content="Mithera Sweets" />
     <meta name="theme-color" content="#3D2418" />
     
     <!-- Open Graph / Facebook -->
@@ -47,12 +50,18 @@ const {
 
     <link rel="icon" type="image/png" href="/images/LOGO.png" />
     <title>{title}</title>
+
+    {schemaJson && (
+      <script type="application/ld+json" set:html={schemaJson} />
+    )}
   </head>
   <body>
     <AnnouncementBar />
     <Navbar />
     <slot />
     
+    <FloatingContactBar client:load />
+
     <script>
       // Scroll Reveal Animation (runs on client)
       document.addEventListener('DOMContentLoaded', () => {

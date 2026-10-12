@@ -1,14 +1,43 @@
 ---
+import { sanityClient, urlFor } from '../lib/sanity';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
 import ShopFilter from '../components/react/ShopFilter';
+
+const rawProducts = await sanityClient.fetch(`
+  *[_type == "product"] | order(name asc) {
+    _id,
+    "slug": slug.current,
+    name,
+    price,
+    rating,
+    reviews,
+    image,
+    category,
+    weight,
+    ingredients,
+    description
+  }
+`);
+
+const allProducts = rawProducts.map((p: any, index: number) => ({
+  id: index + 1,
+  slug: p.slug,
+  name: p.name,
+  price: p.price,
+  rating: p.rating,
+  reviews: p.reviews,
+  image: urlFor(p.image),
+  category: p.category,
+  weight: p.weight,
+  ingredients: p.ingredients || [],
+  description: p.description || '',
+}));
 ---
 
 <BaseLayout title="Shop | Mithera Bakery & Patisserie">
 <main class="min-h-screen bg-cream">
-    <ShopFilter client:load />
+    <ShopFilter client:load products={allProducts} />
   </main>
-  
   <Footer />
 </BaseLayout>
-

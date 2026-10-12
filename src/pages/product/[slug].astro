@@ -1,166 +1,356 @@
 ---
+import { sanityClient, urlFor } from '../../lib/sanity';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Footer from '../../components/Footer.astro';
-import { allProducts } from '../../data/products';
 import ProductActions from '../../components/react/ProductActions';
-import { ChevronRight, Star, Heart, Share2, Truck, ShieldCheck, Plus } from 'lucide-react';
+import { ChevronRight, Star, Heart, Share2, Truck, ShieldCheck, Plus, Sparkles, CheckCircle, ArrowRight } from 'lucide-react';
+import WishlistButton from '../../components/react/WishlistButton';
+import AddToCartButton from '../../components/react/AddToCartButton';
 
 export async function getStaticPaths() {
-  return allProducts.map((product) => ({
-    params: { slug: product.slug },
-    props: { product },
+  const { sanityClient, urlFor } = await import('../../lib/sanity');
+  const rawProducts = await sanityClient.fetch(`
+    *[_type == "product"] {
+      _id,
+      "slug": slug.current,
+      name,
+      price,
+      rating,
+      reviews,
+      image,
+      images,
+      category,
+      weight,
+      ingredients,
+      allergens,
+      storageInstructions,
+      description,
+      faqs,
+      seoTitle,
+      seoDescription,
+      schemaJson
+    }
+  `);
+
+  const formattedProducts = rawProducts.map((p: any, index: number) => ({
+    id: index + 1,
+    slug: p.slug,
+    name: p.name,
+    price: p.price,
+    rating: p.rating || '',
+    reviews: p.reviews || '',
+    image: urlFor(p.image),
+    gallery: (p.images || []).map((img: any) => urlFor(img)),
+    category: p.category,
+    weight: p.weight,
+    ingredients: p.ingredients || [],
+    allergens: p.allergens || 'Contains dairy and tree nuts. Prepared in an artisan facility that also handles seeds and gluten.',
+    storageInstructions: p.storageInstructions || 'Store in a cool, dry place away from direct sunlight. Once opened, keep in an airtight container and consume within 3-4 days for optimal freshness.',
+    description: p.description || '',
+    faqs: p.faqs || [],
+    seoTitle: p.seoTitle,
+    seoDescription: p.seoDescription,
+    schemaJson: p.schemaJson,
   }));
+
+  return formattedProducts.map((product: any) => {
+    const relatedProducts = formattedProducts
+      .filter((p: any) => p.slug !== product.slug)
+      .slice(0, 4);
+
+    return {
+      params: { slug: product.slug },
+      props: {
+        product,
+        relatedProducts
+      },
+    };
+  });
 }
 
-const { product } = Astro.props;
+const { product, relatedProducts } = Astro.props;
+
+// Default structured data for product
+const defaultSchema = JSON.stringify({
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": product.name,
+  "image": [product.image],
+  "description": product.description,
+  "brand": {
+    "@type": "Brand",
+    "name": "Mithera Sweets & Bakery"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "INR",
+    "price": product.price.replace(/[^0-9.]/g, ''),
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "Mithera Sweets"
+    }
+  }
+});
+
+const schemaJson = product.schemaJson || defaultSchema;
 ---
 
-<BaseLayout title={`${product.name} | Mithera Bakery`}>
+<BaseLayout 
+  title={product.seoTitle || `${product.name} | Mithera Sweets & Bakery`}
+  description={product.seoDescription || product.description.slice(0, 160)}
+  schemaJson={schemaJson}
+>
 
-  
-  <main class="min-h-screen pb-20 pt-8 lg:pt-12 bg-white">
-    <div class="container">
+  <main class="min-h-screen pb-20 pt-6 lg:pt-10 bg-cream">
+    <div class="container px-4">
       
       {/* Breadcrumbs */}
-      <nav class="flex items-center gap-2 font-body text-[12px] text-text-muted mb-8 lg:mb-12">
+      <nav class="flex items-center gap-2 font-body text-[12px] text-text-muted mb-6 lg:mb-10 overflow-x-auto whitespace-nowrap">
         <a href="/" class="hover:text-brand-dark transition-colors">Home</a>
-        <ChevronRight className="w-3 h-3" />
+        <ChevronRight className="w-3 h-3 shrink-0" />
         <a href="/shop" class="hover:text-brand-dark transition-colors">Shop</a>
-        <ChevronRight className="w-3 h-3" />
-        <a href="/shop" class="hover:text-brand-dark transition-colors">{product.category}</a>
-        <ChevronRight className="w-3 h-3" />
+        <ChevronRight className="w-3 h-3 shrink-0" />
+        <a href={`/shop?category=${encodeURIComponent(product.category)}`} class="hover:text-brand-dark transition-colors">{product.category}</a>
+        <ChevronRight className="w-3 h-3 shrink-0" />
         <span class="text-brand-dark font-medium">{product.name}</span>
       </nav>
 
-      {/* Product Details Layout */}
-      <div class="flex flex-col lg:flex-row gap-10 lg:gap-16">
+      {/* Main Product Layout */}
+      <div class="flex flex-col lg:flex-row gap-10 lg:gap-14 bg-white p-6 sm:p-8 lg:p-10 rounded-2xl shadow-sm border border-brand-warm/15">
         
-        {/* Left: Image Gallery (Sticky) */}
-        <div class="w-full lg:w-1/2 relative lg:sticky lg:top-24 h-max">
-          <div class="w-full aspect-square bg-cream rounded-[16px] overflow-hidden relative group">
-            {/* Action Buttons */}
-            <div class="absolute top-4 right-4 flex flex-col gap-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <button class="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center text-text-secondary shadow-md transition-all duration-200 hover:bg-brand-warm hover:text-white hover:scale-110">
-                <Heart className="w-[16px] h-[16px]" strokeWidth={2} />
-              </button>
-              <button class="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center text-text-secondary shadow-md transition-all duration-200 hover:bg-brand-dark hover:text-white hover:scale-110">
-                <Share2 className="w-[16px] h-[16px]" strokeWidth={2} />
-              </button>
+        {/* Left: Product Images */}
+        <div class="w-full lg:w-1/2 relative lg:sticky lg:top-28 h-max">
+          <div class="w-full aspect-square bg-cream rounded-2xl overflow-hidden relative group shadow-sm border border-brand-warm/10">
+            <div class="absolute top-4 right-4 flex flex-col gap-2.5 z-10">
+              <div class="scale-110">
+                <WishlistButton client:load productId={product.id} />
+              </div>
             </div>
-            {/* Main Image */}
             <img 
               src={product.image} 
               alt={product.name} 
-              class="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+              class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
           </div>
+
+          {/* Optional Gallery Thumbnails */}
+          {product.gallery && product.gallery.length > 0 && (
+            <div class="flex gap-3 mt-4 overflow-x-auto pb-2">
+              <div class="w-16 h-16 rounded-lg overflow-hidden border-2 border-brand-dark cursor-pointer shrink-0">
+                <img src={product.image} alt={product.name} class="w-full h-full object-cover" />
+              </div>
+              {product.gallery.map((thumb: string, idx: number) => (
+                <div class="w-16 h-16 rounded-lg overflow-hidden border border-brand-dark/20 cursor-pointer shrink-0 hover:border-brand-dark transition-colors">
+                  <img src={thumb} alt={`${product.name} shot ${idx + 1}`} class="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Right: Product Info */}
-        <div class="w-full lg:w-1/2 flex flex-col reveal">
+        {/* Right: Product Details */}
+        <div class="w-full lg:w-1/2 flex flex-col">
           
-          <div class="mb-6">
-            <span class="inline-block px-3 py-1 bg-cream-dark text-brand-dark font-body text-[11px] font-semibold tracking-wider uppercase rounded-full mb-4">
+          <div class="mb-5">
+            <span class="inline-block px-3 py-1 bg-cream text-brand-dark font-body text-[11px] font-semibold tracking-wider uppercase rounded-full mb-3">
               {product.category}
             </span>
-            <h1 class="font-heading text-[32px] lg:text-[42px] font-medium text-brand-dark leading-tight mb-2">
+            <h1 class="font-heading text-[32px] sm:text-[38px] lg:text-[44px] font-medium text-brand-dark leading-tight mb-2">
               {product.name}
             </h1>
             
-            <div class="flex items-center gap-4 mb-4">
-              <div class="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map(() => (
-                  <Star className="w-[14px] h-[14px] text-brand-gold fill-brand-gold" strokeWidth={1} />
-                ))}
+            {/* Conditional Rating: Only renders if rating is populated in CMS */}
+            {product.rating && (
+              <div class="flex items-center gap-3 mb-3">
+                <div class="flex items-center gap-0.5 text-brand-gold">
+                  {[1, 2, 3, 4, 5].map(() => (
+                    <Star className="w-3.5 h-3.5 fill-current text-[#E5A93C]" strokeWidth={1} />
+                  ))}
+                </div>
+                <span class="font-body text-[13px] text-text-secondary">
+                  <strong class="text-brand-dark">{product.rating}</strong> 
+                  {product.reviews && ` (${product.reviews} reviews)`}
+                </span>
               </div>
-              <span class="font-body text-[13px] text-text-secondary">
-                <strong class="text-brand-dark">{product.rating}</strong> ({product.reviews} reviews)
-              </span>
-            </div>
+            )}
 
-            <p class="font-heading text-[28px] text-brand-warm font-medium">
-              {product.price}
-            </p>
-            <p class="font-body text-[12px] text-text-muted mt-1">Inclusive of all taxes</p>
+            <div class="flex items-baseline gap-3 mt-2">
+              <p class="font-heading text-[30px] lg:text-[34px] text-[#3A241A] font-semibold">
+                {product.price}
+              </p>
+              <span class="font-body text-[12px] text-text-muted">Inclusive of all taxes</span>
+            </div>
           </div>
 
-          <div class="h-px w-full bg-brand-dark/10 my-6"></div>
+          <div class="h-px w-full bg-brand-dark/10 my-4"></div>
 
-          <div class="mb-8">
-            <h3 class="font-body text-[15px] font-semibold text-brand-dark mb-3">About this item</h3>
-            <p class="font-body text-[14px] text-text-secondary leading-relaxed">
+          {/* Description */}
+          <div class="mb-6">
+            <h2 class="font-heading text-[16px] font-semibold text-brand-dark mb-2">About this item</h2>
+            <p class="font-body text-[14px] lg:text-[15px] text-text-secondary leading-relaxed">
               {product.description}
             </p>
           </div>
 
-          {/* Size / Weight Selector (Mock) */}
-          <div class="mb-8">
-            <h3 class="font-body text-[14px] font-semibold text-brand-dark mb-3">Select Size / Weight</h3>
-            <div class="flex flex-wrap gap-3">
-              <button class="px-5 py-2.5 border-2 border-brand-dark text-brand-dark rounded-[8px] font-body text-[13px] font-semibold bg-white transition-colors">
+          {/* Weight / Pack Size */}
+          <div class="mb-6">
+            <h3 class="font-body text-[13px] font-semibold text-brand-dark mb-2 uppercase tracking-wider">Weight / Size</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="px-4 py-2 border-2 border-brand-dark text-brand-dark rounded-lg font-body text-[13px] font-semibold bg-cream-light">
                 {product.weight}
-              </button>
-              {(product.category === 'Indian Sweets' || product.category === 'Gift Hampers') && (
-                <button class="px-5 py-2.5 border border-brand-dark/20 text-text-secondary rounded-[8px] font-body text-[13px] hover:border-brand-dark transition-colors bg-white">
-                  1 kg Box
-                </button>
-              )}
+              </span>
             </div>
           </div>
 
-          {/* Actions: Qty + Cart + Buy */}
+          {/* Add to Cart / WhatsApp CTA actions */}
           <ProductActions client:load product={product} />
 
-          {/* Trust Badges */}
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-cream-light p-4 sm:p-5 rounded-[12px] border border-cream-dark/50 mb-8">
-            <div class="flex items-start gap-3">
+          {/* Trust Guarantees */}
+          <div class="grid grid-cols-2 gap-3 bg-cream/60 p-4 rounded-xl border border-brand-warm/20 mb-8">
+            <div class="flex items-start gap-2.5">
               <Truck className="w-5 h-5 text-brand-warm shrink-0 mt-0.5" strokeWidth={1.5} />
               <div>
-                <strong class="block font-body text-[13px] text-brand-dark mb-0.5">Express Delivery</strong>
-                <span class="font-body text-[12px] text-text-secondary">Same day delivery in Mumbai</span>
+                <strong class="block font-body text-[12px] text-brand-dark">Fresh Mumbai Delivery</strong>
+                <span class="font-body text-[11px] text-text-secondary leading-tight">Same-day dispatch available</span>
               </div>
             </div>
-            <div class="flex items-start gap-3">
+            <div class="flex items-start gap-2.5">
               <ShieldCheck className="w-5 h-5 text-brand-warm shrink-0 mt-0.5" strokeWidth={1.5} />
               <div>
-                <strong class="block font-body text-[13px] text-brand-dark mb-0.5">100% Pure</strong>
-                <span class="font-body text-[12px] text-text-secondary">Made with premium ingredients</span>
+                <strong class="block font-body text-[12px] text-brand-dark">100% Pure & Vegetarian</strong>
+                <span class="font-body text-[11px] text-text-secondary leading-tight">Authentic pure ghee preparation</span>
               </div>
             </div>
           </div>
 
-          {/* Accordions / Extra Details */}
-          <div class="border-t border-brand-dark/10">
-            <details class="group py-4 border-b border-brand-dark/10 cursor-pointer">
-              <summary class="flex justify-between items-center font-body text-[14px] font-semibold text-brand-dark outline-none">
-                Ingredients & Allergens
+          {/* Accordions: Ingredients, Storage Instructions, FAQs */}
+          <div class="border-t border-brand-dark/15 divide-y divide-brand-dark/15">
+            
+            {/* Ingredients & Allergens */}
+            <details class="group py-4 cursor-pointer">
+              <summary class="flex justify-between items-center font-heading text-[16px] font-medium text-brand-dark list-none outline-none">
+                <span>Ingredients & Allergens</span>
                 <Plus className="w-4 h-4 transition-transform group-open:rotate-45" />
               </summary>
               <div class="pt-3 pb-1 font-body text-[13px] text-text-secondary">
-                <ul class="list-disc pl-5 space-y-1">
-                  {product.ingredients.map(ing => (
-                    <li>{ing}</li>
-                  ))}
-                </ul>
-                <p class="mt-3 text-[12px] text-text-muted italic">
-                  Allergen Warning: Produced in a facility that also processes tree nuts, peanuts, and dairy.
-                </p>
+                {product.ingredients.length > 0 && (
+                  <ul class="list-disc pl-5 space-y-1 mb-3">
+                    {product.ingredients.map((ing: string) => (
+                      <li>{ing}</li>
+                    ))}
+                  </ul>
+                )}
+                <div class="p-3 bg-amber-50/80 rounded-md border border-amber-200/60 text-amber-950 text-[12px]">
+                  <strong>Allergen Notice:</strong> {product.allergens}
+                </div>
               </div>
             </details>
             
-            <details class="group py-4 border-b border-brand-dark/10 cursor-pointer">
-              <summary class="flex justify-between items-center font-body text-[14px] font-semibold text-brand-dark outline-none">
-                Storage Instructions
+            {/* Storage Instructions (Driven from CMS) */}
+            <details class="group py-4 cursor-pointer" open>
+              <summary class="flex justify-between items-center font-heading text-[16px] font-medium text-brand-dark list-none outline-none">
+                <span>Storage Instructions</span>
                 <Plus className="w-4 h-4 transition-transform group-open:rotate-45" />
               </summary>
               <div class="pt-3 pb-1 font-body text-[13px] text-text-secondary leading-relaxed">
-                Store in a cool, dry place away from direct sunlight. Once opened, keep in an airtight container and consume within 3-4 days for optimal freshness. Do not refrigerate traditional Indian sweets unless specified.
+                {product.storageInstructions}
               </div>
             </details>
+
+            {/* Optional Product FAQs (Driven from CMS) */}
+            {product.faqs && product.faqs.length > 0 && (
+              <details class="group py-4 cursor-pointer">
+                <summary class="flex justify-between items-center font-heading text-[16px] font-medium text-brand-dark list-none outline-none">
+                  <span>Product Questions & Answers</span>
+                  <Plus className="w-4 h-4 transition-transform group-open:rotate-45" />
+                </summary>
+                <div class="pt-3 pb-1 space-y-3 font-body text-[13px]">
+                  {product.faqs.map((f: any) => (
+                    <div class="bg-cream-light p-3 rounded-lg">
+                      <p class="font-semibold text-brand-dark mb-1">{f.question}</p>
+                      <p class="text-text-secondary">{f.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
+
           </div>
 
         </div>
       </div>
+
+      {/* ── ADDITIONAL CONVERSION SECTIONS ── */}
+      
+      {/* 1. Why Choose Mithera Trust Highlights */}
+      <div class="mt-12 py-10 px-6 bg-white rounded-2xl border border-brand-warm/15 shadow-sm text-center">
+        <h2 class="font-heading text-[24px] sm:text-[30px] text-brand-dark mb-2">
+          The Mithera Standard of Purity
+        </h2>
+        <p class="font-body text-[14px] text-text-secondary max-w-2xl mx-auto mb-8">
+          Crafted in small artisanal batches in our Mumbai kitchen, without artificial flavors or chemical stabilizers.
+        </p>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-left">
+          <div class="p-4 rounded-xl bg-cream">
+            <Sparkles className="w-6 h-6 text-brand-warm mb-2" strokeWidth={1.5} />
+            <h3 class="font-heading text-[16px] text-brand-dark font-medium mb-1">Pure Desi Ghee</h3>
+            <p class="font-body text-[12px] text-text-secondary">Sourced from top dairies for aroma and authenticity.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-cream">
+            <CheckCircle className="w-6 h-6 text-brand-warm mb-2" strokeWidth={1.5} />
+            <h3 class="font-heading text-[16px] text-brand-dark font-medium mb-1">Daily Fresh Bakes</h3>
+            <p class="font-body text-[12px] text-text-secondary">Baked fresh every single morning before dawn.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-cream">
+            <ShieldCheck className="w-6 h-6 text-brand-warm mb-2" strokeWidth={1.5} />
+            <h3 class="font-heading text-[16px] text-brand-dark font-medium mb-1">Food Grade Boxes</h3>
+            <p class="font-body text-[12px] text-text-secondary">Preserves texture and crunch during courier transit.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-cream">
+            <Truck className="w-6 h-6 text-brand-warm mb-2" strokeWidth={1.5} />
+            <h3 class="font-heading text-[16px] text-brand-dark font-medium mb-1">Express Dispatch</h3>
+            <p class="font-body text-[12px] text-text-secondary">Carefully hand-delivered right to your doorstep.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Related Products ("You May Also Like") */}
+      {relatedProducts && relatedProducts.length > 0 && (
+        <div class="mt-16">
+          <div class="flex justify-between items-end mb-6">
+            <div>
+              <span class="text-xs font-semibold tracking-wider uppercase text-brand-warm block font-body">More Sweets</span>
+              <h2 class="font-heading text-[28px] lg:text-[36px] text-brand-dark font-medium leading-none">You May Also Like</h2>
+            </div>
+            <a href="/shop" class="text-xs font-semibold text-brand-dark hover:text-brand-warm flex items-center gap-1 font-body">
+              View All <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {relatedProducts.map((rel: any) => (
+              <a 
+                href={`/product/${rel.slug}`}
+                class="group bg-white rounded-xl overflow-hidden border border-brand-warm/15 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 flex flex-col no-underline"
+              >
+                <div class="aspect-square bg-cream overflow-hidden relative">
+                  <img src={rel.image} alt={rel.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <div class="absolute top-2 right-2">
+                    <WishlistButton client:load productId={rel.id} />
+                  </div>
+                </div>
+                <div class="p-3.5 flex flex-col grow">
+                  <span class="text-[10px] font-semibold text-text-muted uppercase font-body mb-1">{rel.category}</span>
+                  <h3 class="font-heading text-[15px] font-medium text-brand-dark mb-1 leading-snug">{rel.name}</h3>
+                  <p class="font-body text-[13px] font-bold text-brand-dark mt-auto pt-2">{rel.price}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
       
     </div>
   </main>
@@ -169,21 +359,12 @@ const { product } = Astro.props;
 </BaseLayout>
 
 <script>
-  // Intersection observer for scroll animations
   document.addEventListener("DOMContentLoaded", () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.15
-    });
-
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach(el => observer.observe(el));
+    }, { root: null, rootMargin: "0px", threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   });
 </script>

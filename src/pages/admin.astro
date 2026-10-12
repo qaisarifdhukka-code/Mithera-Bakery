@@ -1,0 +1,61 @@
+---
+// src/pages/admin.astro
+// Redirects to Sanity Studio for Mithera Sweets content management
+const SANITY_STUDIO_URL = "https://mithera-sweets.sanity.studio";
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mithera Sweets & Bakery - Sanity Studio Admin</title>
+  <meta http-equiv="refresh" content={`0;url=${SANITY_STUDIO_URL}`} />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #FBF9F5;
+      color: #3A241A;
+      text-align: center;
+      padding: 20px;
+    }
+    .card {
+      background: #FFFFFF;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(58, 36, 26, 0.08);
+      max-width: 480px;
+      width: 100%;
+    }
+    h1 { font-size: 24px; margin-bottom: 12px; }
+    p { font-size: 14px; color: #736B63; margin-bottom: 24px; line-height: 1.5; }
+    a.btn {
+      display: inline-block;
+      background: #3A241A;
+      color: #FBF9F5;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    a.btn:hover { background: #553325; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Opening Mithera CMS Studio...</h1>
+    <p>Redirecting you to the Sanity Studio dashboard to manage products, hero banners, Google reviews, and website policies.</p>
+    <a class="btn" href={SANITY_STUDIO_URL}>Go to Sanity Studio Directly</a>
+  </div>
+  <script is:inline define:vars={{ SANITY_STUDIO_URL }}>
+    window.location.href = SANITY_STUDIO_URL;
+  </script>
+</body>
+</html>
